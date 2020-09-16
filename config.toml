@@ -95,33 +95,33 @@ disqusShortname = ""
       title = "Alcohol Consumption Patterns"
       subtitle = "Trends in Beer, Wine & Spirits Examined"
       image = "projects/project1_image.png"
-      url = "projects/project1/Alcohol.Rmd"
+      url = "projects/project1"
 
     [[params.tiles.showcase]]
       title = "TFL Bike Ridership"
       subtitle = "Visualisation of Bike Usage"
       image = "projects/project2_image.png"
-      url = "projects/project2/homework2_Group1_challenge2.Rmd"
+      url = "projects/project2"
 
     [[params.tiles.showcase]]
       title = "Covid-19"
       subtitle = "Do we know enough about this virus?"
       image = "projects/project3_image.png"
-      url = "projects/project3/homework2_Group1_challenge1.Rmd"
+      url = "projects/project3"
 
     [[params.tiles.showcase]]
       title = "Brexit Refendrum"
       subtitle = "Did Political Affliation affec Voting Patters?"
       image = "projects/project4_image.png"
-      url = "projects/project4/homework3 - challenge1.Rmd"
+      url = "projects/project4"
 
-    [[params.tiles.showcase]]
+    ##[[params.tiles.showcase]]
       #title = "Consequat"
       #subtitle = "Ipsum Dolor Sit Amet"
       #image = "pic05.jpg"
       #url = "blogs/ipsum"
 
-    [[params.tiles.showcase]]
+   ## [[params.tiles.showcase]]
       #title = "Etiam"
       #subtitle = "Feugiat Amet Tempus"
       #image = "pic06.jpg"

@@ -17,6 +17,28 @@
     </item>
     
     <item>
+      <title>Brexit Voting Patterns</title>
+      <link>/projects/project4/</link>
+      <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>
+      
+      <guid>/projects/project4/</guid>
+      <description>Challenge 1: Brexit plot In this challenge we are trying to recreate a plot examining how political affiliation translated to the 2015 Brexit referendum.
+At first we load the data into R using read_csv
+#loading brexit_results brexit_results &amp;lt;- read_csv(&amp;quot;brexit_results.csv&amp;quot;) glimpse(brexit_results) ## Rows: 632 ## Columns: 11 ## $ Seat &amp;lt;chr&amp;gt; &amp;quot;Aldershot&amp;quot;, &amp;quot;Aldridge-Brownhills&amp;quot;, &amp;quot;Altrincham and Sale … ## $ con_2015 &amp;lt;dbl&amp;gt; 50.6, 52.0, 53.0, 44.0, 60.8, 22.4, 52.5, 22.1, 50.7, 53.</description>
+    </item>
+    
+    <item>
+      <title>Covid19</title>
+      <link>/projects/project3/</link>
+      <pubDate>Tue, 31 Oct 2017 22:26:13 -0500</pubDate>
+      
+      <guid>/projects/project3/</guid>
+      <description>CDC COVID-19 Public Use Data Let us revisit the CDC Covid-19 Case Surveillance Data.
+There are well over 3 million entries of individual, de-identified patient data. Due to the size of the file,vroom function is used to load the table.
+# URL link to CDC to download data url &amp;lt;- &amp;quot;https://data.cdc.gov/api/views/vbim-akqf/rows.csv?accessType=DOWNLOAD&amp;quot; covid_data &amp;lt;- vroom(url)%&amp;gt;% clean_names() library(scales) covid_death_rate_comorbidities&amp;lt;-covid_data %&amp;gt;% filter(sex %in% c(&amp;#39;Male&amp;#39;,&amp;#39;Female&amp;#39;),!age_group %in% c(&amp;#39;Unknown&amp;#39;,NA),medcond_yn %in% c(&amp;#39;Yes&amp;#39;,&amp;#39;No&amp;#39;),death_yn %in% c(&amp;#39;Yes&amp;#39;,&amp;#39;No&amp;#39;)) %&amp;gt;% #filter for relevant values select(sex,age_group,death_yn,medcond_yn) %&amp;gt;% group_by(sex,age_group,medcond_yn) %&amp;gt;% summarize(death=sum(death_yn==&amp;quot;Yes&amp;quot;),total=n()) %&amp;gt;% mutate(death_rate=(death/total*100)) %&amp;gt;% select(sex,age_group,medcond_yn,death_rate) new_labels&amp;lt;-c(&amp;#39;Yes&amp;#39;=&amp;#39;With Comorbidities&amp;#39;,&amp;#39;No&amp;#39;=&amp;#39;Without Comorbidities&amp;#39;) ggplot(covid_death_rate_comorbidities,aes(x=death_rate,y=age_group))+ geom_col(fill=&amp;#39;blue&amp;#39;)+ facet_grid(medcond_yn~sex,as.</description>
+    </item>
+    
+    <item>
       <title>Tempus</title>
       <link>/blogs/tempus/</link>
       <pubDate>Tue, 31 Oct 2017 22:26:13 -0500</pubDate>
@@ -32,6 +54,27 @@
       
       <guid>/blogs/magna/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>TFL Bike Usage</title>
+      <link>/projects/project2/</link>
+      <pubDate>Tue, 31 Oct 2017 22:26:09 -0500</pubDate>
+      
+      <guid>/projects/project2/</guid>
+      <description>We first the latest data by running the following the GET request.
+url &amp;lt;- &amp;quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&amp;quot; # Download TFL data to temporary file httr::GET(url, write_disk(bike.temp &amp;lt;- tempfile(fileext = &amp;quot;.xlsx&amp;quot;))) ## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-08-26T09%3A19%3A21/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20200916%2Feu-west-1%2Fs3%2Faws4_request&amp;amp;X-Amz-Date=20200916T113204Z&amp;amp;X-Amz-Expires=300&amp;amp;X-Amz-Signature=4b62b9059cfce4847e9c030c313f7460f8e2feac5ba389a1fa18b9a6ecb86292&amp;amp;X-Amz-SignedHeaders=host] ## Date: 2020-09-16 11:32 ## Status: 200 ## Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet ## Size: 164 kB ## &amp;lt;ON DISK&amp;gt; /var/folders/rs/vrxx2x5d1xn8sh9wnyssxfsr0000gn/T//RtmpGLf8ko/file1f2162fcf179.xlsx # Use read_excel to read it as dataframe bike0 &amp;lt;- read_excel(bike.temp, sheet = &amp;quot;Data&amp;quot;, range = cell_cols(&amp;quot;A:B&amp;quot;)) We then perform some data preprocessing.</description>
+    </item>
+    
+    <item>
+      <title>Examining Alcohol</title>
+      <link>/projects/project1/</link>
+      <pubDate>Tue, 31 Oct 2017 21:28:43 -0500</pubDate>
+      
+      <guid>/projects/project1/</guid>
+      <description>First, we load all the relevants library into R. This ensures that we are able to use all functions required later on.
+Where Do People Drink The Most Beer, Wine And Spirits? Back in 2014, fivethiryeight.com published an article on alchohol consumption in different countries. THis dataset be a good source into how drinking behaviours differ in countries.
+library(fivethirtyeight) data(drinks) There are four numeric variables: beer_servings, spirit_servings, wine_servings, and total_liters_of_pure_alcohol.</description>
     </item>
     
     <item>
@@ -52,15 +95,6 @@
       <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
 You can embed an R code chunk like this:
 summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>/projects/project1/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/projects/project1/</guid>
-      <description></description>
     </item>
     
   </channel>
