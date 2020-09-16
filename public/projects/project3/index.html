@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="description" content="Data Science | Ex JP Morgan | Non-Profit Founder">
+	<meta name="author" content="Keshav Asokan">
+	<meta name="generator" content="Hugo 0.75.1" />
+	<title>Covid19 &middot; CV Portfolio</title>
+	<!-- Stylesheets -->
+	
+	<link rel="stylesheet" href="/css/main.css"/>
+	
+	
+
+	
+
+	<!-- Custom Fonts -->
+	<link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="js/ie/html5shiv.js"></script>
+	<script src="js/ie/html5shiv.jsrespond.min.js"></script>
+	<![endif]-->
+</head>
+
+    <body>
+
+    <!-- Wrapper -->
+        <div id="wrapper">
+
+            <!-- Header -->
+    <header id="header" class="alt">
+        <a href="/" class="logo"><strong>Keshav Asokan</strong> <span>Aspiring Data Scientist </span></a>
+        <nav>
+            <a href="#menu">Menu</a>
+        </nav>
+    </header>
+
+<!-- Menu -->
+    <nav id="menu">
+        <ul class="links">
+            
+                <li><a href="/">Home</a></li>
+            
+                <li><a href="/blogs">CV</a></li>
+            
+                <li><a href="/blogs/ipsum">Get In Touch</a></li>
+            
+                <li><a href="/elements.html">Social Media</a></li>
+            
+
+        </ul>
+        <ul class="actions vertical">
+            
+                <li><a href="/blogs" class="button special fit">Get Started</a></li>
+            
+            
+                <li><a href="/" class="button fit">Log In</a></li>
+            
+        </ul>
+    </nav>
+
+        <!-- Main -->
+            <div id="main" class="alt">
+
+                
+                    <section id="one">
+                        <div class="inner">
+                            <header class="major">
+                                <h1>Covid19</h1>
+                            </header>
+                            
+                                <span class="image main"><img src="/img/projects/pic08.jpg" alt="" /></span>
+                            
+                            
+
+
+<div id="cdc-covid-19-public-use-data" class="section level1">
+<h1>CDC COVID-19 Public Use Data</h1>
+<p>Let us revisit the <a href="https://data.cdc.gov/Case-Surveillance/COVID-19-Case-Surveillance-Public-Use-Data/vbim-akqf">CDC Covid-19 Case Surveillance Data</a>.</p>
+<p>There are well over 3 million entries of individual, de-identified patient data. Due to the size of the file,<code>vroom</code> function is used to load the table.</p>
+<pre class="r"><code># URL link to CDC to download data
+url &lt;- &quot;https://data.cdc.gov/api/views/vbim-akqf/rows.csv?accessType=DOWNLOAD&quot;
+
+covid_data &lt;- vroom(url)%&gt;%
+  clean_names()
+library(scales)</code></pre>
+<pre class="r"><code>covid_death_rate_comorbidities&lt;-covid_data %&gt;% 
+  filter(sex %in% c(&#39;Male&#39;,&#39;Female&#39;),!age_group %in% c(&#39;Unknown&#39;,NA),medcond_yn %in% c(&#39;Yes&#39;,&#39;No&#39;),death_yn %in% c(&#39;Yes&#39;,&#39;No&#39;)) %&gt;% #filter for relevant values
+  select(sex,age_group,death_yn,medcond_yn) %&gt;% 
+  group_by(sex,age_group,medcond_yn) %&gt;% 
+  summarize(death=sum(death_yn==&quot;Yes&quot;),total=n()) %&gt;% 
+  mutate(death_rate=(death/total*100)) %&gt;% 
+  select(sex,age_group,medcond_yn,death_rate)
+
+new_labels&lt;-c(&#39;Yes&#39;=&#39;With Comorbidities&#39;,&#39;No&#39;=&#39;Without Comorbidities&#39;)
+
+ggplot(covid_death_rate_comorbidities,aes(x=death_rate,y=age_group))+
+geom_col(fill=&#39;blue&#39;)+
+facet_grid(medcond_yn~sex,as.table=FALSE,labeller=labeller(medcond_yn=new_labels))+
+  theme_bw()+
+  geom_text(aes(label=round(death_rate,digits=1)),hjust=-0.1,size=3)+
+  expand_limits(x=c(0,72))+
+  scale_x_continuous(labels=label_percent(scale=1))+
+  labs(title=&#39;Covid death % percent by age group, sex, and presence of co-morbidities&#39;,x=&#39;&#39;,y=&#39;&#39;,caption=&#39;Source:CDC&#39;)+
+  theme(plot.title=element_text(size=9))</code></pre>
+<p><img src="/projects/project3/index_files/figure-html/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>covid_death_rate_icu&lt;-covid_data %&gt;% 
+  filter(sex %in% c(&#39;Male&#39;,&#39;Female&#39;),!age_group %in% c(&#39;Unknown&#39;,NA),icu_yn %in% c(&#39;Yes&#39;,&#39;No&#39;),death_yn %in% c(&#39;Yes&#39;,&#39;No&#39;)) %&gt;% 
+  select(sex,age_group,death_yn,icu_yn) %&gt;% 
+  group_by(sex,age_group,icu_yn) %&gt;% 
+  summarize(death=sum(death_yn==&quot;Yes&quot;),total=n()) %&gt;% 
+  mutate(death_rate=(death/total*100)) %&gt;% 
+  select(sex,age_group,icu_yn,death_rate)
+
+new_labels_icu&lt;-c(&#39;Yes&#39;=&#39;Admitted to ICU&#39;,&#39;No&#39;=&#39;No ICU&#39;)
+
+ggplot(covid_death_rate_icu,aes(x=death_rate,y=age_group))+
+geom_col(fill=&#39;#ffa084&#39;)+
+facet_grid(icu_yn~sex,as.table=FALSE,labeller=labeller(icu_yn=new_labels_icu))+
+  theme_bw()+
+  geom_text(aes(label=round(death_rate,digits=1)),hjust=-0.1,size=3)+
+  expand_limits(x=c(0,85))+
+  scale_x_continuous(labels=label_percent(scale=1))+
+  labs(title=&#39;Covid death % percent by age group, sex, and weather patient was admitted to ICU&#39;,x=&#39;&#39;,y=&#39;&#39;,caption=&#39;Source:CDC&#39;)+
+  theme(plot.title=element_text(size=9)) </code></pre>
+<p><img src="/projects/project3/index_files/figure-html/unnamed-chunk-2-2.png" width="648" style="display: block; margin: auto;" />
+The original
+<img src="/Users/keshavasokan/Downloads/Applied Stats/Git/my_website/images/covid_death_rate_comorbidities.png" width="100%" style="display: block; margin: auto;" /><img src="/Users/keshavasokan/Downloads/Applied Stats/Git/my_website/images/covid_death_rate_icu.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+
+                        </div>
+                    </section>
+            <!-- Disqus Inject -->
+                
+            </div>
+            
+        <!-- Footer -->
+            
+                <!-- Footer -->
+    <footer id="footer">
+        <div class="inner">
+            <ul class="icons">
+                
+                    <li><a href="" class="icon alt " target="_blank"><span class="label"></span></a></li>
+                
+                    <li><a href="https://www.facebook.com/keshavasokan" class="icon alt fa-facebook" target="_blank"><span class="label">Facebook</span></a></li>
+                
+                    <li><a href="https://www.instagram.com/keshavasokan" class="icon alt fa-instagram" target="_blank"><span class="label">Instagram</span></a></li>
+                
+                    <li><a href="https://www.github.com/keshavasokan" class="icon alt fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+                
+                    <li><a href="https://www.linkedin.com/keshavasokan" class="icon alt fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
+                
+            </ul>
+            <ul class="copyright">
+                <li>&copy; Company Name</li>
+                
+                <li>Design:  <a href="https://www.html5up.net">HTML5 UP</a></li>
+                
+            </ul>
+        </div>
+    </footer>
+
+            
+        </div>
+
+    <!-- Scripts -->
+        <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+
+    
+
+    <!-- Main JS -->
+    <script src="/js/main.js"></script>
+
+    
+
+    
+
+    </body>
+</html>

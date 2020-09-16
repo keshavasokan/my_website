@@ -1,0 +1,260 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="description" content="Data Science | Ex JP Morgan | Non-Profit Founder">
+	<meta name="author" content="Keshav Asokan">
+	<meta name="generator" content="Hugo 0.75.1" />
+	<title>TFL Bike Usage &middot; CV Portfolio</title>
+	<!-- Stylesheets -->
+	
+	<link rel="stylesheet" href="/css/main.css"/>
+	
+	
+
+	
+
+	<!-- Custom Fonts -->
+	<link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="js/ie/html5shiv.js"></script>
+	<script src="js/ie/html5shiv.jsrespond.min.js"></script>
+	<![endif]-->
+</head>
+
+    <body>
+
+    <!-- Wrapper -->
+        <div id="wrapper">
+
+            <!-- Header -->
+    <header id="header" class="alt">
+        <a href="/" class="logo"><strong>Keshav Asokan</strong> <span>Aspiring Data Scientist </span></a>
+        <nav>
+            <a href="#menu">Menu</a>
+        </nav>
+    </header>
+
+<!-- Menu -->
+    <nav id="menu">
+        <ul class="links">
+            
+                <li><a href="/">Home</a></li>
+            
+                <li><a href="/blogs">CV</a></li>
+            
+                <li><a href="/blogs/ipsum">Get In Touch</a></li>
+            
+                <li><a href="/elements.html">Social Media</a></li>
+            
+
+        </ul>
+        <ul class="actions vertical">
+            
+                <li><a href="/blogs" class="button special fit">Get Started</a></li>
+            
+            
+                <li><a href="/" class="button fit">Log In</a></li>
+            
+        </ul>
+    </nav>
+
+        <!-- Main -->
+            <div id="main" class="alt">
+
+                
+                    <section id="one">
+                        <div class="inner">
+                            <header class="major">
+                                <h1>TFL Bike Usage</h1>
+                            </header>
+                            
+                                <span class="image main"><img src="/img/projects/pic09.jpg" alt="" /></span>
+                            
+                            
+
+
+<p>We first the latest data by running the following the GET request.</p>
+<pre class="r"><code>url &lt;- &quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&quot;
+
+# Download TFL data to temporary file
+httr::GET(url, write_disk(bike.temp &lt;- tempfile(fileext = &quot;.xlsx&quot;)))</code></pre>
+<pre><code>## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-08-26T09%3A19%3A21/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20200916%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20200916T113204Z&amp;X-Amz-Expires=300&amp;X-Amz-Signature=4b62b9059cfce4847e9c030c313f7460f8e2feac5ba389a1fa18b9a6ecb86292&amp;X-Amz-SignedHeaders=host]
+##   Date: 2020-09-16 11:32
+##   Status: 200
+##   Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+##   Size: 164 kB
+## &lt;ON DISK&gt;  /var/folders/rs/vrxx2x5d1xn8sh9wnyssxfsr0000gn/T//RtmpGLf8ko/file1f2162fcf179.xlsx</code></pre>
+<pre class="r"><code># Use read_excel to read it as dataframe
+bike0 &lt;- read_excel(bike.temp,
+                   sheet = &quot;Data&quot;,
+                   range = cell_cols(&quot;A:B&quot;))</code></pre>
+<p>We then perform some data preprocessing.</p>
+<pre class="r"><code># change dates to get year, month, and week
+bike &lt;- bike0 %&gt;% 
+  clean_names() %&gt;% 
+  rename (bikes_hired = number_of_bicycle_hires) %&gt;% 
+  mutate (year = year(day),
+          month = lubridate::month(day, label = TRUE),
+          week = isoweek(day))
+
+bike_filtered &lt;- bike %&gt;%
+                  filter(year %in% c(2015: 2020)) %&gt;%
+                  group_by(year, month) %&gt;%
+                  summarise(avgMonth=mean(bikes_hired))
+
+bike_monthly_average &lt;- bike_filtered %&gt;%
+                  filter(year %in% c(2015: 2019)) %&gt;%
+                  group_by(month) %&gt;%
+                  summarise(year_avgMonth=mean(avgMonth))
+
+# Change month to numeric
+bike_filtered$month &lt;- as.numeric(bike_filtered$month)
+
+# Change month to numeric
+bike_monthly_average$month &lt;- as.numeric(bike_monthly_average$month)
+
+
+bike_left_join_1 &lt;-left_join(bike_filtered,bike_monthly_average, by=&quot;month&quot;)
+
+bike_left_join_2 &lt;- bike_left_join_1 %&gt;%
+  mutate(diff_month = avgMonth-year_avgMonth)
+
+
+bike_left_join_2</code></pre>
+<pre><code>## # A tibble: 67 x 5
+## # Groups:   year [6]
+##     year month avgMonth year_avgMonth diff_month
+##    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;      &lt;dbl&gt;
+##  1  2015     1   18828.        20259.     -1431.
+##  2  2015     2   19617.        21573.     -1956.
+##  3  2015     3   22625.        23115.      -490.
+##  4  2015     4   27951.        28230.      -278.
+##  5  2015     5   29031.        32422.     -3391.
+##  6  2015     6   34659.        35262.      -604.
+##  7  2015     7   36607.        37809.     -1202.
+##  8  2015     8   33643.        34243.      -600.
+##  9  2015     9   30114.        32433.     -2319.
+## 10  2015    10   28560.        29900.     -1339.
+## # … with 57 more rows</code></pre>
+<p>Before we move into replicating the graph, lets study the underlying distributions.</p>
+<p>We can easily create a facet grid that plots bikes hired by month and year.</p>
+<p><img src="/Users/keshavasokan/Downloads/Applied Stats/Git/my_website/images/tfl_distributions_monthly.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>It seems like the distributions in 2020 have a smaller peak and are much wider than the previous years. It seems like the Covid-19 pandemic seems to have change people’s behaviours in renting bikes. People are not renting many bikes due to the current lockdowns.</p>
+<p><img src="/Users/keshavasokan/Downloads/Applied Stats/Git/my_website/images/tfl_monthly.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>bike_left_join_2$month &lt;- as.numeric(bike_left_join_2$month)
+bike_left_join_2$month &lt;- as.factor(bike_left_join_2$month)
+
+ggplot(data=bike_left_join_2, aes(x=month , y=year_avgMonth, group=1)) + facet_wrap(~year) + 
+labs(x=NULL, y=&quot;Bike Rentals&quot;, caption=&quot;Source: TfL, London Data Store&quot;, title=&quot;Monthly changes in TfL bike rentals&quot;, subtitle= &quot;Change from monthly average shown in blue \nand calculated between 2015-2019&quot;) + theme_minimal(base_family=&quot;Arial&quot;) + theme (plot.title = element_text(size=10), plot.subtitle = element_text(size=9))+
+  #+ geom_line(aes(x=month, y = year_avgMonth), size=1.2, colour=&quot;blue&quot;) +
+#+ geom_line(aes(x=month, y=avgMonth), color=&quot;black&quot;, size=1.2)
+  geom_ribbon(aes(ymin = year_avgMonth + if_else(diff_month &lt; 0, diff_month, 0),
+                  ymax = year_avgMonth), color =&quot;grey&quot;, fill = &quot;red&quot;, alpha = 0.3) +
+  geom_ribbon(aes(ymin = year_avgMonth,
+                  ymax = year_avgMonth + if_else(diff_month &gt; 0, diff_month, 0)),color =&quot;grey&quot;, fill = &quot;green&quot;, alpha = 0.3)+ theme(aspect.ratio=0.5) + theme(axis.text.x= element_text(size=5)) +
+  scale_x_discrete(labels=c(&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;, &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;))+ geom_line(color=&quot;blue&quot;)</code></pre>
+<p><img src="/projects/project2/index_files/figure-html/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>The second one looks at percentage changes from the expected level of weekly rentals. The two grey shaded rectangles correspond to the second (weeks 14-26) and fourth (weeks 40-52) quarters.</p>
+<p><img src="/Users/keshavasokan/Downloads/Applied Stats/Git/my_website/images/tfl_weekly.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>For both of these graphs, we calculate the expected number of rentals per week or month between 2015-2019 and then, see how each week/month of 2020 compares to the expected rentals. More specifically, we use the calculation <code>excess_rentals = actual_rentals - expected_rentals</code>.</p>
+<p>We used means as expected rentals as the data is approximaately normally distributed.</p>
+<pre class="r"><code>bike_filtered_week &lt;- bike %&gt;%
+                  filter(year %in% c(2015: 2020)) %&gt;%
+                  group_by(year, week) %&gt;%
+                  summarise(avgWeek_filtered_week=mean(bikes_hired))
+
+bike_weekly_average &lt;- bike_filtered_week %&gt;%
+                  filter(year %in% c(2015: 2019)) %&gt;%
+                  group_by(week) %&gt;%
+                  summarise(avgWeek_weekly_average=mean(avgWeek_filtered_week)) 
+
+bike_joined_full &lt;- left_join(bike_filtered_week, bike_weekly_average, by = &quot;week&quot;)
+
+
+bike_joined_full_2 &lt;- bike_joined_full %&gt;%
+  mutate(excessrentalspercent = (avgWeek_filtered_week - avgWeek_weekly_average)*100/avgWeek_weekly_average) </code></pre>
+<p>Finally, we produce the plots.</p>
+<pre class="r"><code>ggplot(bike_joined_full_2, aes(x=week, y=excessrentalspercent)) + 
+  labs(title= &quot;Weekly Changes in TFL Bike Rentals&quot;, subtitle=&quot; % changes from weekly averages calculated between 2015-2019&quot;, x=&quot;week&quot;, y=NULL, caption=&quot;Source: TfL, London Data Store&quot;) +
+  facet_wrap(~year)+ geom_line(fill=&quot;black&quot;) +
+  theme_minimal() +
+  geom_ribbon(aes(ymin = excessrentalspercent - if_else(excessrentalspercent &lt; 0, excessrentalspercent, 0),
+                  ymax = excessrentalspercent), color =&quot;grey&quot;, fill = &quot;red&quot;, alpha = 0.3) +
+  geom_ribbon(aes(ymin = excessrentalspercent,
+                  ymax = excessrentalspercent - if_else(excessrentalspercent &gt; 0, excessrentalspercent, 0)),color =&quot;grey&quot;, fill = &quot;green&quot;, alpha = 0.3) + 
+   scale_x_discrete(limits = c(13, 26, 39, 53)) +
+  geom_rect(xmin=13, xmax=26, ymin=-150, ymax=150, fill=&quot;grey&quot;, alpha=0.01) +geom_rect(xmin=39, xmax=52,ymin=-150, ymax=150,
+                                                                                          fill=&quot;grey&quot;, alpha=0.01) +
+  geom_rug(sides=&quot;b&quot;, aes(colour=ifelse(excessrentalspercent &gt; 0, &quot;red&quot;, &quot;green&quot;)), alpha=0.2) +
+  theme(legend.position=&#39;none&#39;) +
+  scale_y_continuous(labels = function(x) paste0(x, &quot;%&quot;))</code></pre>
+<p><img src="/projects/project2/index_files/figure-html/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>
+
+                        </div>
+                    </section>
+            <!-- Disqus Inject -->
+                
+            </div>
+            
+        <!-- Footer -->
+            
+                <!-- Footer -->
+    <footer id="footer">
+        <div class="inner">
+            <ul class="icons">
+                
+                    <li><a href="" class="icon alt " target="_blank"><span class="label"></span></a></li>
+                
+                    <li><a href="https://www.facebook.com/keshavasokan" class="icon alt fa-facebook" target="_blank"><span class="label">Facebook</span></a></li>
+                
+                    <li><a href="https://www.instagram.com/keshavasokan" class="icon alt fa-instagram" target="_blank"><span class="label">Instagram</span></a></li>
+                
+                    <li><a href="https://www.github.com/keshavasokan" class="icon alt fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+                
+                    <li><a href="https://www.linkedin.com/keshavasokan" class="icon alt fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
+                
+            </ul>
+            <ul class="copyright">
+                <li>&copy; Company Name</li>
+                
+                <li>Design:  <a href="https://www.html5up.net">HTML5 UP</a></li>
+                
+            </ul>
+        </div>
+    </footer>
+
+            
+        </div>
+
+    <!-- Scripts -->
+        <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+
+    
+
+    <!-- Main JS -->
+    <script src="/js/main.js"></script>
+
+    
+
+    
+
+    </body>
+</html>

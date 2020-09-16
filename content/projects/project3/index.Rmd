@@ -1,0 +1,112 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T22:26:13-05:00"
+description: Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis tempus.
+draft: false
+image: pic08.jpg
+keywords: ""
+slug: project3
+title: Covid19
+---
+
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+```
+
+
+```{r load-libraries, include=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(lubridate)
+library(here)
+library(skimr)
+library(janitor)
+library(httr)
+library(readxl)
+library(vroom)
+library(scales)
+```
+
+
+
+# CDC COVID-19 Public Use Data
+
+Let us revisit the [CDC Covid-19 Case Surveillance Data](https://data.cdc.gov/Case-Surveillance/COVID-19-Case-Surveillance-Public-Use-Data/vbim-akqf). 
+
+
+There are well over 3 million entries of individual, de-identified patient data. Due to the size of the file,`vroom` function is used to load the table.
+
+```{r, cache= TRUE}
+# URL link to CDC to download data
+url <- "https://data.cdc.gov/api/views/vbim-akqf/rows.csv?accessType=DOWNLOAD"
+
+covid_data <- vroom(url)%>%
+  clean_names()
+library(scales)
+```
+
+```{r}
+covid_death_rate_comorbidities<-covid_data %>% 
+  filter(sex %in% c('Male','Female'),!age_group %in% c('Unknown',NA),medcond_yn %in% c('Yes','No'),death_yn %in% c('Yes','No')) %>% #filter for relevant values
+  select(sex,age_group,death_yn,medcond_yn) %>% 
+  group_by(sex,age_group,medcond_yn) %>% 
+  summarize(death=sum(death_yn=="Yes"),total=n()) %>% 
+  mutate(death_rate=(death/total*100)) %>% 
+  select(sex,age_group,medcond_yn,death_rate)
+
+new_labels<-c('Yes'='With Comorbidities','No'='Without Comorbidities')
+
+ggplot(covid_death_rate_comorbidities,aes(x=death_rate,y=age_group))+
+geom_col(fill='blue')+
+facet_grid(medcond_yn~sex,as.table=FALSE,labeller=labeller(medcond_yn=new_labels))+
+  theme_bw()+
+  geom_text(aes(label=round(death_rate,digits=1)),hjust=-0.1,size=3)+
+  expand_limits(x=c(0,72))+
+  scale_x_continuous(labels=label_percent(scale=1))+
+  labs(title='Covid death % percent by age group, sex, and presence of co-morbidities',x='',y='',caption='Source:CDC')+
+  theme(plot.title=element_text(size=9))
+
+  
+covid_death_rate_icu<-covid_data %>% 
+  filter(sex %in% c('Male','Female'),!age_group %in% c('Unknown',NA),icu_yn %in% c('Yes','No'),death_yn %in% c('Yes','No')) %>% 
+  select(sex,age_group,death_yn,icu_yn) %>% 
+  group_by(sex,age_group,icu_yn) %>% 
+  summarize(death=sum(death_yn=="Yes"),total=n()) %>% 
+  mutate(death_rate=(death/total*100)) %>% 
+  select(sex,age_group,icu_yn,death_rate)
+
+new_labels_icu<-c('Yes'='Admitted to ICU','No'='No ICU')
+
+ggplot(covid_death_rate_icu,aes(x=death_rate,y=age_group))+
+geom_col(fill='#ffa084')+
+facet_grid(icu_yn~sex,as.table=FALSE,labeller=labeller(icu_yn=new_labels_icu))+
+  theme_bw()+
+  geom_text(aes(label=round(death_rate,digits=1)),hjust=-0.1,size=3)+
+  expand_limits(x=c(0,85))+
+  scale_x_continuous(labels=label_percent(scale=1))+
+  labs(title='Covid death % percent by age group, sex, and weather patient was admitted to ICU',x='',y='',caption='Source:CDC')+
+  theme(plot.title=element_text(size=9)) 
+
+```
+The original
+```{r covid_challenge, echo=FALSE, out.width="100%"}
+knitr::include_graphics(here::here("images", "covid_death_rate_comorbidities.png"), error = FALSE)
+knitr::include_graphics(here::here("images", "covid_death_rate_icu.png"), error = FALSE)
+```
+
