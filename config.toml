@@ -92,9 +92,9 @@ disqusShortname = ""
     # Display your showcases here.
     
     [[params.tiles.showcase]]
-      title = "Aliquam"
-      subtitle = "Ipsum Dolor Sit Amet"
-      image = "pic01.jpg"
+      title = "Alcohol Consumption Patterns"
+      subtitle = "Trends in Beer, Wine & Spirits Examined"
+      image = "Alcohol.jpg"
       url = "blogs/aliquam"
 
     [[params.tiles.showcase]]
