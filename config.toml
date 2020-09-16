@@ -94,7 +94,7 @@ disqusShortname = ""
     [[params.tiles.showcase]]
       title = "Alcohol Consumption Patterns"
       subtitle = "Trends in Beer, Wine & Spirits Examined"
-      image = "Alcohol.jpg"
+      image = "alcohol.jpg"
       url = "blogs/aliquam"
 
     [[params.tiles.showcase]]
