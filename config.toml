@@ -94,38 +94,38 @@ disqusShortname = ""
     [[params.tiles.showcase]]
       title = "Alcohol Consumption Patterns"
       subtitle = "Trends in Beer, Wine & Spirits Examined"
-      image = "alcohol.jpg"
-      url = "blogs/aliquam"
+      image = "projects/project1_image.png"
+      url = "projects/project1/Alcohol.Rmd"
 
     [[params.tiles.showcase]]
-      title = "Tempus"
-      subtitle = "Feugiat Amet Tempus"
-      image = "pic02.jpg"
-      url = "blogs/tempus"
+      title = "TFL Bike Ridership"
+      subtitle = "Visualisation of Bike Usage"
+      image = "projects/project2_image.png"
+      url = "projects/project2/homework2_Group1_challenge2.Rmd"
 
     [[params.tiles.showcase]]
-      title = "Magna"
-      subtitle = "Lorem Etiam Nullam"
-      image = "pic03.jpg"
-      url = "blogs/magna"
+      title = "Covid-19"
+      subtitle = "Do we know enough about this virus?"
+      image = "projects/project3_image.png"
+      url = "projects/project3/homework2_Group1_challenge1.Rmd"
 
     [[params.tiles.showcase]]
-      title = "Ipsum"
-      subtitle = "Nisl Sed Aliquam"
-      image = "pic04.jpg"
-      url = "blogs/ipsum"
+      title = "Brexit Refendrum"
+      subtitle = "Did Political Affliation affec Voting Patters?"
+      image = "projects/project4_image.png"
+      url = "projects/project4/homework3 - challenge1.Rmd"
 
     [[params.tiles.showcase]]
-      title = "Consequat"
-      subtitle = "Ipsum Dolor Sit Amet"
-      image = "pic05.jpg"
-      url = "blogs/ipsum"
+      #title = "Consequat"
+      #subtitle = "Ipsum Dolor Sit Amet"
+      #image = "pic05.jpg"
+      #url = "blogs/ipsum"
 
     [[params.tiles.showcase]]
-      title = "Etiam"
-      subtitle = "Feugiat Amet Tempus"
-      image = "pic06.jpg"
-      url = "blogs/ipsum"
+      #title = "Etiam"
+      #subtitle = "Feugiat Amet Tempus"
+      #image = "pic06.jpg"
+      #url = "blogs/ipsum"
     # You can make more showcases by copy and pasting the code above
 
   [params.blog]
@@ -176,13 +176,13 @@ disqusShortname = ""
 
     [[params.contact.phone]]
     title = "Phone"
-    phone = "+6012 345 7895"
+    phone = "+44 7932 78995"
 
     [[params.contact.address]]
-    title = "Address"
-    street = "Street"
-    city = "City, ST 00000"
-    country = "Country"
+    title = "London Business School"
+    street = "Regent's Park"
+    city = "London, NW1 4SA"
+    country = "United Kingdom"
 
   # Footer section
   [params.footer]
@@ -191,9 +191,9 @@ disqusShortname = ""
 
     # Uses font awesome icons
     [[params.footer.social]]
-      icon = "fa-twitter"
-      url= "https://www.twitter.com"
-      label = "Twitter"
+      #icon = "fa-twitter"
+      #url= "https://www.twitter.com"
+      #label = "Twitter"
 
     [[params.footer.social]]
       icon = "fa-facebook"
