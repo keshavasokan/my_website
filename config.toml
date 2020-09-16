@@ -1,5 +1,5 @@
 # Site settings
-baseURL = "https://kaso1.netlify.app/"
+baseURL = "https://keshavasokan.netlify.app/"
 languageCode = "en-us"
 title = "CV Portfolio"
 theme = "forty"
