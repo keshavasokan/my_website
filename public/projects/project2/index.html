@@ -85,30 +85,40 @@
                             
 
 
-<p>We first the latest data by running the following the GET request.</p>
+<p>We first the latest data by running a GET request from the London Data Store.</p>
 <pre class="r"><code>url &lt;- &quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&quot;
 
 # Download TFL data to temporary file
 httr::GET(url, write_disk(bike.temp &lt;- tempfile(fileext = &quot;.xlsx&quot;)))</code></pre>
-<pre><code>## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-08-26T09%3A19%3A21/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20200916%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20200916T113204Z&amp;X-Amz-Expires=300&amp;X-Amz-Signature=4b62b9059cfce4847e9c030c313f7460f8e2feac5ba389a1fa18b9a6ecb86292&amp;X-Amz-SignedHeaders=host]
-##   Date: 2020-09-16 11:32
+<pre><code>## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-08-26T09%3A19%3A21/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20200917%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20200917T115015Z&amp;X-Amz-Expires=300&amp;X-Amz-Signature=0127c11757325f50164c9dc736e537b96accea3f35b840427feb6fa7bfaa5efc&amp;X-Amz-SignedHeaders=host]
+##   Date: 2020-09-17 11:50
 ##   Status: 200
 ##   Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
 ##   Size: 164 kB
-## &lt;ON DISK&gt;  /var/folders/rs/vrxx2x5d1xn8sh9wnyssxfsr0000gn/T//RtmpGLf8ko/file1f2162fcf179.xlsx</code></pre>
+## &lt;ON DISK&gt;  /var/folders/rs/vrxx2x5d1xn8sh9wnyssxfsr0000gn/T//RtmpgQbqsX/file8ebe5805f2ed.xlsx</code></pre>
 <pre class="r"><code># Use read_excel to read it as dataframe
 bike0 &lt;- read_excel(bike.temp,
                    sheet = &quot;Data&quot;,
                    range = cell_cols(&quot;A:B&quot;))</code></pre>
-<p>We then perform some data preprocessing.</p>
-<pre class="r"><code># change dates to get year, month, and week
+<p>We then perform some data preprocessing tasks:</p>
+<ol style="list-style-type: decimal">
+<li>Process dates.</li>
+<li>Select relevant years (2015-2020)</li>
+<li>Changing month columns to numeric.</li>
+<li>Calculate difference between monthly average and 5 year average for the month.</li>
+</ol>
+<pre class="r"><code>#
+# Change dates to get year, month, and week
+#
 bike &lt;- bike0 %&gt;% 
   clean_names() %&gt;% 
   rename (bikes_hired = number_of_bicycle_hires) %&gt;% 
   mutate (year = year(day),
           month = lubridate::month(day, label = TRUE),
           week = isoweek(day))
-
+#
+# Select only years 2015-2020.
+#
 bike_filtered &lt;- bike %&gt;%
                   filter(year %in% c(2015: 2020)) %&gt;%
                   group_by(year, month) %&gt;%
@@ -125,13 +135,14 @@ bike_filtered$month &lt;- as.numeric(bike_filtered$month)
 # Change month to numeric
 bike_monthly_average$month &lt;- as.numeric(bike_monthly_average$month)
 
-
+# Perform left join
 bike_left_join_1 &lt;-left_join(bike_filtered,bike_monthly_average, by=&quot;month&quot;)
 
+# Calculate difference (diff_month).
 bike_left_join_2 &lt;- bike_left_join_1 %&gt;%
   mutate(diff_month = avgMonth-year_avgMonth)
 
-
+# Print new dataset
 bike_left_join_2</code></pre>
 <pre><code>## # A tibble: 67 x 5
 ## # Groups:   year [6]
@@ -148,29 +159,29 @@ bike_left_join_2</code></pre>
 ##  9  2015     9   30114.        32433.     -2319.
 ## 10  2015    10   28560.        29900.     -1339.
 ## # … with 57 more rows</code></pre>
-<p>Before we move into replicating the graph, lets study the underlying distributions.</p>
-<p>We can easily create a facet grid that plots bikes hired by month and year.</p>
-<p><img src="/Users/keshavasokan/Downloads/Applied Stats/Git/my_website/images/tfl_distributions_monthly.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>It seems like the distributions in 2020 have a smaller peak and are much wider than the previous years. It seems like the Covid-19 pandemic seems to have change people’s behaviours in renting bikes. People are not renting many bikes due to the current lockdowns.</p>
-<p><img src="/Users/keshavasokan/Downloads/Applied Stats/Git/my_website/images/tfl_monthly.png" width="100%" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>bike_left_join_2$month &lt;- as.numeric(bike_left_join_2$month)
+<p>Following this, we plot a graph to show how much bike_rentals deviates from the monthly average in 2015-2020.</p>
+<pre class="r"><code># Change to numeric
+bike_left_join_2$month &lt;- as.numeric(bike_left_join_2$month)
+# Change to factor
 bike_left_join_2$month &lt;- as.factor(bike_left_join_2$month)
 
+## Plot
 ggplot(data=bike_left_join_2, aes(x=month , y=year_avgMonth, group=1)) + facet_wrap(~year) + 
 labs(x=NULL, y=&quot;Bike Rentals&quot;, caption=&quot;Source: TfL, London Data Store&quot;, title=&quot;Monthly changes in TfL bike rentals&quot;, subtitle= &quot;Change from monthly average shown in blue \nand calculated between 2015-2019&quot;) + theme_minimal(base_family=&quot;Arial&quot;) + theme (plot.title = element_text(size=10), plot.subtitle = element_text(size=9))+
-  #+ geom_line(aes(x=month, y = year_avgMonth), size=1.2, colour=&quot;blue&quot;) +
-#+ geom_line(aes(x=month, y=avgMonth), color=&quot;black&quot;, size=1.2)
   geom_ribbon(aes(ymin = year_avgMonth + if_else(diff_month &lt; 0, diff_month, 0),
                   ymax = year_avgMonth), color =&quot;grey&quot;, fill = &quot;red&quot;, alpha = 0.3) +
   geom_ribbon(aes(ymin = year_avgMonth,
                   ymax = year_avgMonth + if_else(diff_month &gt; 0, diff_month, 0)),color =&quot;grey&quot;, fill = &quot;green&quot;, alpha = 0.3)+ theme(aspect.ratio=0.5) + theme(axis.text.x= element_text(size=5)) +
   scale_x_discrete(labels=c(&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;, &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;))+ geom_line(color=&quot;blue&quot;)</code></pre>
 <p><img src="/projects/project2/index_files/figure-html/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
-<p>The second one looks at percentage changes from the expected level of weekly rentals. The two grey shaded rectangles correspond to the second (weeks 14-26) and fourth (weeks 40-52) quarters.</p>
-<p><img src="/Users/keshavasokan/Downloads/Applied Stats/Git/my_website/images/tfl_weekly.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>We can see that in 2015 and early 2016, TFL bikes was consistently below the monthly averages. However, this trends starts to reverse from July 2016 as TFL bikes usage starts to outpace the averages.</p>
+<p>One interesting area to focus on is the year 2020 when the Covid-19 pandemic hits. TFL bike usage was quick to drop below average in March when case count started rising. However, starting May, positive recovery is seen as usage started to outpace averages again.</p>
+<p><strong>Graph 2: Weekly Changes in TFL Bike Rentals</strong></p>
+<p>Now we move to plotting a new graph. This second graph looks at percentage changes from the expected level of weekly rentals.</p>
 <p>For both of these graphs, we calculate the expected number of rentals per week or month between 2015-2019 and then, see how each week/month of 2020 compares to the expected rentals. More specifically, we use the calculation <code>excess_rentals = actual_rentals - expected_rentals</code>.</p>
-<p>We used means as expected rentals as the data is approximaately normally distributed.</p>
-<pre class="r"><code>bike_filtered_week &lt;- bike %&gt;%
+<p>We used means as expected rentals as the data is approximately normally distributed.</p>
+<pre class="r"><code># 
+bike_filtered_week &lt;- bike %&gt;%
                   filter(year %in% c(2015: 2020)) %&gt;%
                   group_by(year, week) %&gt;%
                   summarise(avgWeek_filtered_week=mean(bikes_hired))

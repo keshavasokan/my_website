@@ -43,7 +43,7 @@ library(vroom)
 library(scales)
 ```
 
-We first the latest data by running the following the GET request.
+We first the latest data by running a GET request from the London Data Store.
 
 ```{r, get_tfl_data}
 url <- "https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx"
@@ -56,16 +56,26 @@ bike0 <- read_excel(bike.temp,
                    sheet = "Data",
                    range = cell_cols("A:B"))
 ```
-We then perform some data preprocessing.
+We then perform some data preprocessing tasks:
+
+1. Process dates.
+2. Select relevant years (2015-2020)
+3. Changing month columns to numeric.
+4. Calculate difference between monthly average and 5 year average for the month.
+
 ```{r}
-# change dates to get year, month, and week
+#
+# Change dates to get year, month, and week
+#
 bike <- bike0 %>% 
   clean_names() %>% 
   rename (bikes_hired = number_of_bicycle_hires) %>% 
   mutate (year = year(day),
           month = lubridate::month(day, label = TRUE),
           week = isoweek(day))
-
+#
+# Select only years 2015-2020.
+#
 bike_filtered <- bike %>%
                   filter(year %in% c(2015: 2020)) %>%
                   group_by(year, month) %>%
@@ -82,45 +92,29 @@ bike_filtered$month <- as.numeric(bike_filtered$month)
 # Change month to numeric
 bike_monthly_average$month <- as.numeric(bike_monthly_average$month)
 
-
+# Perform left join
 bike_left_join_1 <-left_join(bike_filtered,bike_monthly_average, by="month")
 
+# Calculate difference (diff_month).
 bike_left_join_2 <- bike_left_join_1 %>%
   mutate(diff_month = avgMonth-year_avgMonth)
 
-
+# Print new dataset
 bike_left_join_2
 ```
 
-
-Before we move into replicating the graph, lets study the underlying distributions.
-
-We can easily create a facet grid that plots bikes hired by month and year.
-
-```{r tfl_month_year_grid, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("images", "tfl_distributions_monthly.png"), error = FALSE)
-```
-
-It seems like the distributions in 2020 have a smaller peak and are much wider than the previous years. It seems like the Covid-19 pandemic seems to have change people's behaviours in renting bikes. People are not renting many bikes due to the current lockdowns.
-
-
-```{r tfl_absolute_monthly_change, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("images", "tfl_monthly.png"), error = FALSE)
-
-
-```
-
-
+Following this, we plot a graph to show how much bike_rentals deviates from the monthly average in 2015-2020.
+ 
 ```{r }
 
-
+# Change to numeric
 bike_left_join_2$month <- as.numeric(bike_left_join_2$month)
+# Change to factor
 bike_left_join_2$month <- as.factor(bike_left_join_2$month)
 
+## Plot
 ggplot(data=bike_left_join_2, aes(x=month , y=year_avgMonth, group=1)) + facet_wrap(~year) + 
 labs(x=NULL, y="Bike Rentals", caption="Source: TfL, London Data Store", title="Monthly changes in TfL bike rentals", subtitle= "Change from monthly average shown in blue \nand calculated between 2015-2019") + theme_minimal(base_family="Arial") + theme (plot.title = element_text(size=10), plot.subtitle = element_text(size=9))+
-  #+ geom_line(aes(x=month, y = year_avgMonth), size=1.2, colour="blue") +
-#+ geom_line(aes(x=month, y=avgMonth), color="black", size=1.2)
   geom_ribbon(aes(ymin = year_avgMonth + if_else(diff_month < 0, diff_month, 0),
                   ymax = year_avgMonth), color ="grey", fill = "red", alpha = 0.3) +
   geom_ribbon(aes(ymin = year_avgMonth,
@@ -129,19 +123,21 @@ labs(x=NULL, y="Bike Rentals", caption="Source: TfL, London Data Store", title="
   
 ```
 
+We can see that in 2015 and early 2016, TFL bikes was consistently below the monthly averages. However, this trends starts to reverse from July 2016 as TFL bikes usage starts to outpace the averages.
 
-The second one looks at percentage changes from the expected level of weekly rentals. The two grey shaded rectangles correspond to the second (weeks 14-26) and fourth (weeks 40-52) quarters.
+One interesting area to focus on is the year 2020 when the Covid-19 pandemic hits. TFL bike usage was quick to drop below average in March when case count started rising. However, starting May, positive recovery is seen as usage started to outpace averages again. 
 
-```{r tfl_percent_change, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("images", "tfl_weekly.png"), error = FALSE)
-```
+**Graph 2: Weekly Changes in TFL Bike Rentals**
+
+Now we move to plotting a new graph. This second graph looks at percentage changes from the expected level of weekly rentals.
 
 For both of these graphs, we calculate the expected number of rentals per week or month between 2015-2019 and then, see how each week/month of 2020 compares to the expected rentals. More specifically, we use the calculation `excess_rentals = actual_rentals - expected_rentals`. 
 
-We used means as expected rentals as the data is approximaately normally distributed.
+We used means as expected rentals as the data is approximately normally distributed.
 
 ```{r}
 
+# 
 bike_filtered_week <- bike %>%
                   filter(year %in% c(2015: 2020)) %>%
                   group_by(year, week) %>%
@@ -159,6 +155,7 @@ bike_joined_full_2 <- bike_joined_full %>%
   mutate(excessrentalspercent = (avgWeek_filtered_week - avgWeek_weekly_average)*100/avgWeek_weekly_average) 
 
 ```
+ 
  Finally, we produce the plots.
 ```{r}
 ggplot(bike_joined_full_2, aes(x=week, y=excessrentalspercent)) + 

@@ -62,19 +62,20 @@ There are well over 3 million entries of individual, de-identified patient data.
       <pubDate>Tue, 31 Oct 2017 22:26:09 -0500</pubDate>
       
       <guid>/projects/project2/</guid>
-      <description>We first the latest data by running the following the GET request.
-url &amp;lt;- &amp;quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&amp;quot; # Download TFL data to temporary file httr::GET(url, write_disk(bike.temp &amp;lt;- tempfile(fileext = &amp;quot;.xlsx&amp;quot;))) ## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-08-26T09%3A19%3A21/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20200916%2Feu-west-1%2Fs3%2Faws4_request&amp;amp;X-Amz-Date=20200916T113204Z&amp;amp;X-Amz-Expires=300&amp;amp;X-Amz-Signature=4b62b9059cfce4847e9c030c313f7460f8e2feac5ba389a1fa18b9a6ecb86292&amp;amp;X-Amz-SignedHeaders=host] ## Date: 2020-09-16 11:32 ## Status: 200 ## Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet ## Size: 164 kB ## &amp;lt;ON DISK&amp;gt; /var/folders/rs/vrxx2x5d1xn8sh9wnyssxfsr0000gn/T//RtmpGLf8ko/file1f2162fcf179.xlsx # Use read_excel to read it as dataframe bike0 &amp;lt;- read_excel(bike.temp, sheet = &amp;quot;Data&amp;quot;, range = cell_cols(&amp;quot;A:B&amp;quot;)) We then perform some data preprocessing.</description>
+      <description>We first the latest data by running a GET request from the London Data Store.
+url &amp;lt;- &amp;quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&amp;quot; # Download TFL data to temporary file httr::GET(url, write_disk(bike.temp &amp;lt;- tempfile(fileext = &amp;quot;.xlsx&amp;quot;))) ## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-08-26T09%3A19%3A21/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20200917%2Feu-west-1%2Fs3%2Faws4_request&amp;amp;X-Amz-Date=20200917T115015Z&amp;amp;X-Amz-Expires=300&amp;amp;X-Amz-Signature=0127c11757325f50164c9dc736e537b96accea3f35b840427feb6fa7bfaa5efc&amp;amp;X-Amz-SignedHeaders=host] ## Date: 2020-09-17 11:50 ## Status: 200 ## Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet ## Size: 164 kB ## &amp;lt;ON DISK&amp;gt; /var/folders/rs/vrxx2x5d1xn8sh9wnyssxfsr0000gn/T//RtmpgQbqsX/file8ebe5805f2ed.xlsx # Use read_excel to read it as dataframe bike0 &amp;lt;- read_excel(bike.temp, sheet = &amp;quot;Data&amp;quot;, range = cell_cols(&amp;quot;A:B&amp;quot;)) We then perform some data preprocessing tasks:</description>
     </item>
     
     <item>
-      <title>Examining Alcohol</title>
+      <title>Examining Alcohol Consumption Patterns</title>
       <link>/projects/project1/</link>
       <pubDate>Tue, 31 Oct 2017 21:28:43 -0500</pubDate>
       
       <guid>/projects/project1/</guid>
       <description>First, we load all the relevants library into R. This ensures that we are able to use all functions required later on.
-Where Do People Drink The Most Beer, Wine And Spirits? Back in 2014, fivethiryeight.com published an article on alchohol consumption in different countries. THis dataset be a good source into how drinking behaviours differ in countries.
-library(fivethirtyeight) data(drinks) There are four numeric variables: beer_servings, spirit_servings, wine_servings, and total_liters_of_pure_alcohol.</description>
+Where Do People Drink The Most Beer, Wine And Spirits? Back in 2014, fivethiryeight.com published an article on alchohol consumption in different countries. This dataset be a good source into how drinking behaviours differ in countries.
+Let us load the dataset.
+library(fivethirtyeight) data(drinks) We then perform simple EDA.</description>
     </item>
     
     <item>
