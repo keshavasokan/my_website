@@ -111,7 +111,7 @@ disqusShortname = ""
 
     [[params.tiles.showcase]]
       title = "Brexit Refendrum"
-      subtitle = "Did Political Affliation affec Voting Patters?"
+      subtitle = "Did Political Affiliation affect Voting Patters?"
       image = "projects/project4_image.png"
       url = "projects/project4"
 

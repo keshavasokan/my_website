@@ -90,12 +90,12 @@
 
 # Download TFL data to temporary file
 httr::GET(url, write_disk(bike.temp &lt;- tempfile(fileext = &quot;.xlsx&quot;)))</code></pre>
-<pre><code>## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-08-26T09%3A19%3A21/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20200917%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20200917T115015Z&amp;X-Amz-Expires=300&amp;X-Amz-Signature=0127c11757325f50164c9dc736e537b96accea3f35b840427feb6fa7bfaa5efc&amp;X-Amz-SignedHeaders=host]
-##   Date: 2020-09-17 11:50
+<pre><code>## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-09-18T09%3A06%3A54/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20200919%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20200919T233428Z&amp;X-Amz-Expires=300&amp;X-Amz-Signature=a9d0fd3650fffa76e3ce55dbcbeb9d234c37b8532d064f88bec87ff78380bd45&amp;X-Amz-SignedHeaders=host]
+##   Date: 2020-09-19 23:34
 ##   Status: 200
 ##   Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-##   Size: 164 kB
-## &lt;ON DISK&gt;  /var/folders/rs/vrxx2x5d1xn8sh9wnyssxfsr0000gn/T//RtmpgQbqsX/file8ebe5805f2ed.xlsx</code></pre>
+##   Size: 165 kB
+## &lt;ON DISK&gt;  /var/folders/rs/vrxx2x5d1xn8sh9wnyssxfsr0000gn/T//Rtmps8gfaJ/file5792e707148.xlsx</code></pre>
 <pre class="r"><code># Use read_excel to read it as dataframe
 bike0 &lt;- read_excel(bike.temp,
                    sheet = &quot;Data&quot;,
@@ -144,7 +144,7 @@ bike_left_join_2 &lt;- bike_left_join_1 %&gt;%
 
 # Print new dataset
 bike_left_join_2</code></pre>
-<pre><code>## # A tibble: 67 x 5
+<pre><code>## # A tibble: 68 x 5
 ## # Groups:   year [6]
 ##     year month avgMonth year_avgMonth diff_month
 ##    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;      &lt;dbl&gt;
@@ -158,8 +158,11 @@ bike_left_join_2</code></pre>
 ##  8  2015     8   33643.        34243.      -600.
 ##  9  2015     9   30114.        32433.     -2319.
 ## 10  2015    10   28560.        29900.     -1339.
-## # … with 57 more rows</code></pre>
-<p>Following this, we plot a graph to show how much bike_rentals deviates from the monthly average in 2015-2020.</p>
+## # … with 58 more rows</code></pre>
+<p>Following this, we move on to plotting 2 graphs to show deviation of bike_rentals values from expected values in 2015-2020.</p>
+<p>For both of these graphs, we calculate the expected number of rentals per week or month between 2015-2019 and then, see how each week/month of 2020 compares to the expected rentals. More specifically, we use the calculation <code>excess_rentals = actual_rentals - expected_rentals</code>. We used means as expected rentals as the data is approximately normally distributed.</p>
+<p><strong>Graph 1: Monthly Changes in TFL Bike Rentals</strong></p>
+<p>For our first graph, we plot a graph to show how much bike_rentals deviates from the monthly average in 2015-2020.</p>
 <pre class="r"><code># Change to numeric
 bike_left_join_2$month &lt;- as.numeric(bike_left_join_2$month)
 # Change to factor
@@ -175,25 +178,25 @@ labs(x=NULL, y=&quot;Bike Rentals&quot;, caption=&quot;Source: TfL, London Data 
   scale_x_discrete(labels=c(&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;, &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;))+ geom_line(color=&quot;blue&quot;)</code></pre>
 <p><img src="/projects/project2/index_files/figure-html/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
 <p>We can see that in 2015 and early 2016, TFL bikes was consistently below the monthly averages. However, this trends starts to reverse from July 2016 as TFL bikes usage starts to outpace the averages.</p>
-<p>One interesting area to focus on is the year 2020 when the Covid-19 pandemic hits. TFL bike usage was quick to drop below average in March when case count started rising. However, starting May, positive recovery is seen as usage started to outpace averages again.</p>
+<p>One interesting area to focus on is the year 2020 when the Covid-19 pandemic hits. TFL bike usage was quick to drop below average in March when case count started rising and the country went into lockdown. However, starting May, positive recovery is seen as usage started to outpace averages again.</p>
 <p><strong>Graph 2: Weekly Changes in TFL Bike Rentals</strong></p>
 <p>Now we move to plotting a new graph. This second graph looks at percentage changes from the expected level of weekly rentals.</p>
-<p>For both of these graphs, we calculate the expected number of rentals per week or month between 2015-2019 and then, see how each week/month of 2020 compares to the expected rentals. More specifically, we use the calculation <code>excess_rentals = actual_rentals - expected_rentals</code>.</p>
-<p>We used means as expected rentals as the data is approximately normally distributed.</p>
-<pre class="r"><code># 
+<pre class="r"><code># Filter out, group and calculate mean - Dataset 1
 bike_filtered_week &lt;- bike %&gt;%
                   filter(year %in% c(2015: 2020)) %&gt;%
                   group_by(year, week) %&gt;%
                   summarise(avgWeek_filtered_week=mean(bikes_hired))
 
+# Filter out, group and calculate mean - Dataset 2
 bike_weekly_average &lt;- bike_filtered_week %&gt;%
                   filter(year %in% c(2015: 2019)) %&gt;%
                   group_by(week) %&gt;%
                   summarise(avgWeek_weekly_average=mean(avgWeek_filtered_week)) 
 
+# Join Dataset 1 and 2
 bike_joined_full &lt;- left_join(bike_filtered_week, bike_weekly_average, by = &quot;week&quot;)
 
-
+# Calculate Excess Rental 
 bike_joined_full_2 &lt;- bike_joined_full %&gt;%
   mutate(excessrentalspercent = (avgWeek_filtered_week - avgWeek_weekly_average)*100/avgWeek_weekly_average) </code></pre>
 <p>Finally, we produce the plots.</p>
@@ -212,6 +215,7 @@ bike_joined_full_2 &lt;- bike_joined_full %&gt;%
   theme(legend.position=&#39;none&#39;) +
   scale_y_continuous(labels = function(x) paste0(x, &quot;%&quot;))</code></pre>
 <p><img src="/projects/project2/index_files/figure-html/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Shifting our lens from the monthly to weekly, we can see some seemily different patterns then when observing only monthly data. For example, not all datapoints in 2015 and early 2016 are below average (red). This is why it is important to be careful to look at different timelines before drawing conclusions.</p>
 
                         </div>
                     </section>

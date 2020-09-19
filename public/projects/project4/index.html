@@ -83,10 +83,9 @@
                             
 
 
-<div id="challenge-1-brexit-plot" class="section level1">
-<h1>Challenge 1: Brexit plot</h1>
-<p>In this challenge we are trying to recreate a plot examining how political affiliation translated to the 2015 Brexit referendum.</p>
-<p>At first we load the data into R using read_csv</p>
+<p>In this exercise we are trying to recreate a plot examining how political affiliation translated to the 2015 Brexit referendum.</p>
+<p>First, we load the libraries.</p>
+<p>Next, we load the data into R using read_csv</p>
 <pre class="r"><code>#loading brexit_results
 brexit_results &lt;- read_csv(&quot;brexit_results.csv&quot;)
 
@@ -104,7 +103,7 @@ glimpse(brexit_results)</code></pre>
 ## $ unemployed  &lt;dbl&gt; 3.64, 4.55, 3.04, 4.26, 2.47, 4.74, 3.69, 5.11, 3.39, 2.9…
 ## $ degree      &lt;dbl&gt; 13.87, 9.97, 28.60, 9.34, 18.78, 6.09, 13.12, 7.90, 17.80…
 ## $ age_18to24  &lt;dbl&gt; 9.41, 7.33, 6.44, 7.75, 5.73, 8.21, 7.82, 8.94, 7.56, 7.6…</code></pre>
-<p>The data does not yet appear in “tidy” format, so we have to tidy the data before continuing</p>
+<p>The data does not yet appear in “tidy” format, so we have to tidy the data before continuing.</p>
 <pre class="r"><code>#bringing the data into &quot;tidy&quot; format
 brexit_results_tidy &lt;- brexit_results %&gt;% 
   pivot_longer(cols = con_2015:ukip_2015 ,names_to = &quot;political_party&quot;, values_to = &quot;election_share&quot;)
@@ -127,17 +126,16 @@ glimpse(brexit_results_tidy)</code></pre>
 vector &lt;- c(&quot;#0087dc&quot;,&quot;#d50000&quot;, &quot;#FDBB30&quot;, &quot;#EFE600&quot;) #this is a vector with party colors
 
 final_plot &lt;- ggplot(brexit_results_tidy) + #using tidy data
-  
-  geom_point(aes(x=election_share, y=leave_share, group = political_party, color = political_party), #observations grouped by political party, color dependent on political party aswell
+geom_point(aes(x=election_share, y=leave_share, group = political_party, color = political_party), #observations grouped by political party, color dependent on political party aswell
              size=1, # adjusting point size
              alpha=0.3) + #adjusting transparency
-  geom_smooth(aes(x=election_share, y=leave_share, group = political_party, color = political_party), #observations grouped by political party, color dependent on political party as well
+geom_smooth(aes(x=election_share, y=leave_share, group = political_party, color = political_party), #observations grouped by political party, color dependent on political party as well
               method=&quot;lm&quot;, 
               formula=&#39;y~x&#39;) + 
-  scale_color_manual(values = vector, #using colors defined above to overwrite standard colors
+scale_color_manual(values = vector, #using colors defined above to overwrite standard colors
                      labels = c(&quot;Conservative&quot;, &quot;Labour&quot;, &quot;LibDem&quot;, &quot;UKIP&quot;)) + #adding lables to groups
-  theme_bw() +
-  theme(legend.position = &quot;bottom&quot;, 
+theme_bw() +
+theme(legend.position = &quot;bottom&quot;, 
         legend.title=element_blank()) + #formatting legend
   labs(x=&quot;Party % in the UK 2015 general election&quot;, 
        y=&quot;Leave % in the 2016 Brexit referendum&quot;, 
@@ -145,7 +143,8 @@ final_plot &lt;- ggplot(brexit_results_tidy) + #using tidy data
   
 final_plot</code></pre>
 <p><img src="/projects/project4/index_files/figure-html/unnamed-chunk-3-1.png" width="648" style="display: block; margin: auto;" /></p>
-</div>
+<p>We can see that constituencies that voted heavily for UKIP voted Leave. This was similar for Conservatives constituencies but the effect of increase was much weaker.</p>
+<p>On the other hand, as a bigger proportion of constituents voted for LibDem or Labour, smaller vote proportion was observed.</p>
 
                         </div>
                     </section>
