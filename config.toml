@@ -20,7 +20,7 @@ disqusShortname = ""
 
   # Provide your metadata here.
   name = "Keshav Asokan"
-  description = "Data Science | Ex JP Morgan | Non-Profit Founder"
+  description = "Data Science | Ex JP Morgan "
 
   # Link custom assets relative to /static
   custom_css = []
@@ -163,7 +163,7 @@ disqusShortname = ""
     # - send a dummy email yourself to confirm your account
     # - click the confirm link in the email from www.formspree.io
     # - you're done. Happy mailing!
-    # formEmail = "example@domain.com"
+    formEmail = "kasokan.mam2021@london.edu"
 
     # Contact Section
     # You can add multiple emails, phone numbers, or addresses
