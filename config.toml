@@ -49,7 +49,7 @@ disqusShortname = ""
 
     [[params.navigation.links]]
       name = "CV"
-      url = "blogs/CV_KESHAV_ASOKAN_MAM2021.pdf"
+      url = "blogs/CV_KESHAV_ASOKAN_DATA MY.pdf"
 
     [[params.navigation.links]]
       name = "Get In Touch"
@@ -143,7 +143,7 @@ disqusShortname = ""
     Post graduation, he pursued employment in a major investment bank, J.P. Morgan as a graduate analyst. 
     Working in a data driven organsiation, Keshav learnt first hand on how data is able to empower organisations to make better decisions. He is currently seeking a data scientist position to complement his subject matter expertise in this area."""
     buttonText = "MY CV"
-    url = "blogs/CV_KESHAV_ASOKAN_MAM2021.pdf"
+    url = "blogs/CV_KESHAV_ASOKAN_DATA MY.pdf"
     
 
   # Contact section
