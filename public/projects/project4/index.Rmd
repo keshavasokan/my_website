@@ -45,6 +45,9 @@ library(infer)
 library(openintro)
 ```
 
+
+# Data Input
+
 First, we load the data into R using read_csv and take a glimpse of the dataset.
 
 ```{r}
@@ -55,6 +58,8 @@ brexit_results <- read_csv("brexit_results.csv")
 # observe
 glimpse(brexit_results)
 ```
+
+# Cleaning Data 
 
 The data does not yet appear in "tidy" format, so we have to tidy the data before continuing.
 
@@ -68,6 +73,7 @@ brexit_results_tidy <- brexit_results %>%
 glimpse(brexit_results_tidy)
 ```
 
+# Data Visualisation
 
 Now that the data set is in "tidy" format, we can start to plot our graphs. Speficially, we are interested in plotting Leave % against Party %.
 
@@ -95,7 +101,9 @@ theme(legend.position = "bottom",
 final_plot
 ```
 
-We can see that constituencies that voted heavily for UKIP voted in much larger proportions to leave the EU. This effect was somewhat similar for Conservatives constituencies albeit with much smaller rate. 
+# Conclusion
+
+We can see that constituencies that voted heavily for UKIP voted in much larger proportions to leave the EU. This positive correlation was somewhat similar for Conservatives constituencies albeit to a much smaller rate. 
 
 On the other hand, in the constituents that voted for LibDem and Labour in the 2015, smaller Leave vote proportion was observed. However, the inverse relationship was much stronger for the LibDem constituencies.
 

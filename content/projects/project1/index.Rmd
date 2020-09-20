@@ -71,7 +71,11 @@ skim(drinks)
 From this EDA, we note that there are four numeric variables: *beer_servings*, *spirit_servings*, *wine_servings*, and *total_liters_of_pure_alcohol*.  In addition, there is one character variable, *country* and no missing values.
 
 
-With this insight, we can start modelling. First, we start by looking at beer consumptions patterns across differing countries.
+With this insight, we can start modelling. 
+
+# How does beer consumption vary?
+
+First, we start by looking at beer consumptions patterns across differing countries.
 
 
 ```{r beer_plot}
@@ -91,6 +95,8 @@ Namibia seems to be the top beer drinkers followed closely by Czech Republic and
 
 Russian Federation, Brazil and Andorra drink the least beer.
 
+# Who drinks the most wine?
+
 Next, we plot a bar chart showing wine consumption in various countries.
 
 
@@ -104,6 +110,8 @@ NULL
 ```
 
 The wine consumption by country bar chart shows that wine is most popular in Western European, Scandinavian, and South American countries. Unsurprisingly, **France** is the top wine consumer.
+
+# Who can hold their spirits?
 
 Last but not least, we plot a bar chart of spirit consumption.
 

@@ -43,6 +43,8 @@ library(vroom)
 library(scales)
 ```
 
+# Data Collection
+
 We first the latest data by running a GET request from the London Data Store.
 
 ```{r, get_tfl_data}
@@ -56,6 +58,9 @@ bike0 <- read_excel(bike.temp,
                    sheet = "Data",
                    range = cell_cols("A:B"))
 ```
+
+# Data Wrangling
+
 We then perform some data preprocessing tasks:
 
 1. Process dates.
@@ -102,6 +107,8 @@ bike_left_join_2 <- bike_left_join_1 %>%
 bike_left_join_2
 ```
 
+
+# Data Visualisation
 
 Following this, we move on to plotting 2 relevant graphs to illustrate the deviation of bike_rentals values from expected values in 2015-2020.
 

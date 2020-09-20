@@ -84,6 +84,9 @@
 <div id="cdc-covid-19-public-use-data" class="section level1">
 <h1>CDC COVID-19 Public Use Data</h1>
 <p>Let us revisit the <a href="https://data.cdc.gov/Case-Surveillance/COVID-19-Case-Surveillance-Public-Use-Data/vbim-akqf">CDC Covid-19 Case Surveillance Data</a>.</p>
+</div>
+<div id="data-input" class="section level1">
+<h1>Data Input</h1>
 <p>We start by loading the dataset. There are well over 3 million entries of individual, de-identified patient data, so this process takes a while.</p>
 <pre class="r"><code># URL link to CDC to download data
 url &lt;- &quot;https://data.cdc.gov/api/views/vbim-akqf/rows.csv?accessType=DOWNLOAD&quot;
@@ -93,6 +96,9 @@ url &lt;- &quot;https://data.cdc.gov/api/views/vbim-akqf/rows.csv?accessType=DOW
 covid_data &lt;- vroom(url)%&gt;%
   clean_names()
 library(scales)</code></pre>
+</div>
+<div id="data-wrangling" class="section level1">
+<h1>Data Wrangling</h1>
 <p>We now select relevant columns and calculate death rates with this formula:</p>
 <p>death_rate = Number of deaths/Total Deaths x 100</p>
 <pre class="r"><code># Create a death_rate_comorbidities column
@@ -106,6 +112,9 @@ covid_death_rate_comorbidities&lt;-covid_data %&gt;%
 
 # Change labels for better clarity
 new_labels&lt;-c(&#39;Yes&#39;=&#39;With Comorbidities&#39;,&#39;No&#39;=&#39;Without Comorbidities&#39;)</code></pre>
+</div>
+<div id="does-covid-19-death-rate-increase-with-co-morbidities" class="section level1">
+<h1>Does Covid 19 death rate increase with co-morbidities?</h1>
 <p>Next, we plot a graph of Covid death % percent by age group, sex, and presence of co-morbidities.</p>
 <pre class="r"><code>ggplot(covid_death_rate_comorbidities,aes(x=death_rate,y=age_group))+
 geom_col(fill=&#39;blue&#39;)+
@@ -124,6 +133,9 @@ facet_grid(medcond_yn~sex,as.table=FALSE,labeller=labeller(medcond_yn=new_labels
 <li><p>For a particular gender and age group, Covid-19 patients who are admitted into ICU die at a higher rate compared to those not admitted.</p></li>
 </ol>
 <p>This shows that increased age and presence of <strong>co-morbidities</strong> is correlated with higher death rate.</p>
+</div>
+<div id="does-covid-19-death-rate-increase-with-icu-admission" class="section level1">
+<h1>Does Covid 19 death rate increase with ICU admission?</h1>
 <p>Next, we plot a graph of Covid death percent by age group, sex, and ICU admission.</p>
 <pre class="r"><code># Create a death_rate_icu column
 covid_death_rate_icu&lt;-covid_data %&gt;% 
@@ -154,6 +166,9 @@ Here are some observations from this plot:</p>
 <li><p>Death rate for males are higher than females.</p></li>
 <li><p>For a particular gender and age group, Covid-19 patients who are admitted into ICU die at a higher rate compared to those not admitted.</p></li>
 </ol>
+</div>
+<div id="what-can-we-infer" class="section level1">
+<h1>What can we infer?</h1>
 <p>It is important that <strong>correlation does not equate causation</strong>. In the context of this question, this is to say that old age and ICU admission <strong>does not cause</strong> an increase death amongst Covid patients, they are just correlated with a higher death rate.</p>
 </div>
 

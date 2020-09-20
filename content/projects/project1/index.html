@@ -171,7 +171,11 @@ data(drinks)</code></pre>
 </tbody>
 </table>
 <p>From this EDA, we note that there are four numeric variables: <em>beer_servings</em>, <em>spirit_servings</em>, <em>wine_servings</em>, and <em>total_liters_of_pure_alcohol</em>. In addition, there is one character variable, <em>country</em> and no missing values.</p>
-<p>With this insight, we can start modelling. First, we start by looking at beer consumptions patterns across differing countries.</p>
+<p>With this insight, we can start modelling.</p>
+</div>
+<div id="how-does-beer-consumption-vary" class="section level1">
+<h1>How does beer consumption vary?</h1>
+<p>First, we start by looking at beer consumptions patterns across differing countries.</p>
 <pre class="r"><code>top25_beer &lt;- top_n(drinks, 25, beer_servings)
 
 ggplot(data = top25_beer, mapping = aes (y = reorder(country, beer_servings), x = beer_servings)) + geom_col(fill=&#39;beige&#39;) + labs(title = &quot;Who drinks the most beer?&quot;, subtitle = &quot;Top 25 Beer Consuming Countries&quot;,
@@ -181,6 +185,9 @@ NULL</code></pre>
 <p>The beer consumption by country bar charts show that beer is most popular in Eastern European, African, and Central American countries.</p>
 <p>Namibia seems to be the top beer drinkers followed closely by Czech Republic and Gabon.</p>
 <p>Russian Federation, Brazil and Andorra drink the least beer.</p>
+</div>
+<div id="who-drinks-the-most-wine" class="section level1">
+<h1>Who drinks the most wine?</h1>
 <p>Next, we plot a bar chart showing wine consumption in various countries.</p>
 <pre class="r"><code>top25_wine &lt;- top_n(drinks, 25, wine_servings)
 ggplot(data = top25_wine, mapping = aes (y = reorder(country, wine_servings), x = wine_servings)) +   geom_col(fill=&#39;pink&#39;) +
@@ -189,6 +196,9 @@ y = &quot;Country&quot;, x = &quot;Wine Servings (glasses of wine per person per
 NULL</code></pre>
 <p><img src="/projects/project1/index_files/figure-html/wine_plot-1.png" width="648" style="display: block; margin: auto;" /></p>
 <p>The wine consumption by country bar chart shows that wine is most popular in Western European, Scandinavian, and South American countries. Unsurprisingly, <strong>France</strong> is the top wine consumer.</p>
+</div>
+<div id="who-can-hold-their-spirits" class="section level1">
+<h1>Who can hold their spirits?</h1>
 <p>Last but not least, we plot a bar chart of spirit consumption.</p>
 <pre class="r"><code>top25_spirits &lt;- top_n(drinks, 25, spirit_servings)
 ggplot(data = top25_spirits, mapping = aes (y = reorder(country, spirit_servings), x = spirit_servings)) + geom_col(fill=&#39;light green&#39;) + labs(title = &quot;Top 25 Spirits Consuming Countries&quot;,

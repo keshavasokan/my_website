@@ -47,6 +47,8 @@ library(vroom)
 library(scales)
 ```
 
+# Data Input
+
 We start by loading the dataset.  There are well over 3 million entries of individual, de-identified patient data, so this process takes a while. 
 
 ```{r, cache= TRUE}
@@ -60,6 +62,7 @@ covid_data <- vroom(url)%>%
 library(scales)
 ```
 
+# Data Wrangling
 
 We now select relevant columns and calculate death rates with this formula:
 
@@ -78,6 +81,9 @@ covid_death_rate_comorbidities<-covid_data %>%
 # Change labels for better clarity
 new_labels<-c('Yes'='With Comorbidities','No'='Without Comorbidities')
 ```
+
+
+# Does Covid 19 death rate increase with co-morbidities?
 
 Next, we plot a graph of Covid death % percent by age group, sex, and presence of co-morbidities.
 
@@ -104,7 +110,12 @@ From this graph, we can see that:
 
 This shows that increased age and presence of **co-morbidities** is correlated with higher death rate.
 
+
+# Does Covid 19 death rate increase with ICU admission?
+
 Next, we plot a graph of Covid death  percent by age group, sex, and ICU admission. 
+
+
 ```{r}
 # Create a death_rate_icu column
 covid_death_rate_icu<-covid_data %>% 
@@ -137,5 +148,8 @@ Here are some observations from this plot:
 2. Death rate for males are higher than females.
 
 3. For a particular gender and age group, Covid-19 patients who are admitted into ICU die at a higher rate compared to those not admitted.
+
+
+# What can we infer?
 
 It is important that **correlation does not equate causation**. In the context of this question, this is to say that old age and ICU admission **does not cause** an increase death amongst Covid patients, they are just correlated with a higher death rate. 

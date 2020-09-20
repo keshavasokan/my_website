@@ -23,7 +23,7 @@
       
       <guid>/projects/project4/</guid>
       <description>In this exercise we are trying to recreate a plot examining how political affiliations correlated with how people voted in the 2015 Brexit referendum.
-First, we load the data into R using read_csv and take a glimpse of the dataset.
+Data Input First, we load the data into R using read_csv and take a glimpse of the dataset.
 # loading brexit_results brexit_results &amp;lt;- read_csv(&amp;quot;brexit_results.csv&amp;quot;) # observe glimpse(brexit_results) ## Rows: 632 ## Columns: 11 ## $ Seat &amp;lt;chr&amp;gt; &amp;quot;Aldershot&amp;quot;, &amp;quot;Aldridge-Brownhills&amp;quot;, &amp;quot;Altrincham and Sale … ## $ con_2015 &amp;lt;dbl&amp;gt; 50.</description>
     </item>
     
@@ -34,8 +34,8 @@ First, we load the data into R using read_csv and take a glimpse of the dataset.
       
       <guid>/projects/project3/</guid>
       <description>CDC COVID-19 Public Use Data Let us revisit the CDC Covid-19 Case Surveillance Data.
-We start by loading the dataset. There are well over 3 million entries of individual, de-identified patient data, so this process takes a while.
-# URL link to CDC to download data url &amp;lt;- &amp;quot;https://data.cdc.gov/api/views/vbim-akqf/rows.csv?accessType=DOWNLOAD&amp;quot; # Use `vroom` function is used to load the table as the file is large. covid_data &amp;lt;- vroom(url)%&amp;gt;% clean_names() library(scales) We now select relevant columns and calculate death rates with this formula:</description>
+ Data Input We start by loading the dataset. There are well over 3 million entries of individual, de-identified patient data, so this process takes a while.
+# URL link to CDC to download data url &amp;lt;- &amp;quot;https://data.cdc.gov/api/views/vbim-akqf/rows.csv?accessType=DOWNLOAD&amp;quot; # Use `vroom` function is used to load the table as the file is large. covid_data &amp;lt;- vroom(url)%&amp;gt;% clean_names() library(scales)  Data Wrangling We now select relevant columns and calculate death rates with this formula:</description>
     </item>
     
     <item>
@@ -62,8 +62,8 @@ We start by loading the dataset. There are well over 3 million entries of indivi
       <pubDate>Tue, 31 Oct 2017 22:26:09 -0500</pubDate>
       
       <guid>/projects/project2/</guid>
-      <description>We first the latest data by running a GET request from the London Data Store.
-url &amp;lt;- &amp;quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&amp;quot; # Download TFL data to temporary file httr::GET(url, write_disk(bike.temp &amp;lt;- tempfile(fileext = &amp;quot;.xlsx&amp;quot;))) ## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-09-18T09%3A06%3A54/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20200920%2Feu-west-1%2Fs3%2Faws4_request&amp;amp;X-Amz-Date=20200920T204527Z&amp;amp;X-Amz-Expires=300&amp;amp;X-Amz-Signature=dae0be846650f748cf60bcb835c980ffd4e9e195222fb7bc551bb9a0d86090f7&amp;amp;X-Amz-SignedHeaders=host] ## Date: 2020-09-20 20:48 ## Status: 200 ## Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet ## Size: 165 kB ## &amp;lt;ON DISK&amp;gt; /var/folders/rs/vrxx2x5d1xn8sh9wnyssxfsr0000gn/T//RtmppzoKsU/file2ab84024666a.xlsx # Use read_excel to read it as dataframe bike0 &amp;lt;- read_excel(bike.temp, sheet = &amp;quot;Data&amp;quot;, range = cell_cols(&amp;quot;A:B&amp;quot;)) We then perform some data preprocessing tasks:</description>
+      <description>Data Collection We first the latest data by running a GET request from the London Data Store.
+url &amp;lt;- &amp;quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&amp;quot; # Download TFL data to temporary file httr::GET(url, write_disk(bike.temp &amp;lt;- tempfile(fileext = &amp;quot;.xlsx&amp;quot;))) ## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-09-18T09%3A06%3A54/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20200920%2Feu-west-1%2Fs3%2Faws4_request&amp;amp;X-Amz-Date=20200920T221706Z&amp;amp;X-Amz-Expires=300&amp;amp;X-Amz-Signature=a58af84450c35e01608ceafac7dcd0c248021fc03b5903c02900b8d02fa43bcb&amp;amp;X-Amz-SignedHeaders=host] ## Date: 2020-09-20 22:17 ## Status: 200 ## Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet ## Size: 165 kB ## &amp;lt;ON DISK&amp;gt; /var/folders/rs/vrxx2x5d1xn8sh9wnyssxfsr0000gn/T//RtmpKP1i7I/file41c8461426fb.xlsx # Use read_excel to read it as dataframe bike0 &amp;lt;- read_excel(bike.temp, sheet = &amp;quot;Data&amp;quot;, range = cell_cols(&amp;quot;A:B&amp;quot;))  Data Wrangling We then perform some data preprocessing tasks:</description>
     </item>
     
     <item>
