@@ -170,7 +170,7 @@ disqusShortname = ""
     # by copying the corresponding map with frontmatter code.
     [[params.contact.email]]
     title = "Email"
-    email = "asokankeshav@gmail.com"
+    email = "kasokan.mam2021@london.edu"
 
     [[params.contact.phone]]
     title = "Phone"
