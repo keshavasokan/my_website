@@ -163,14 +163,14 @@ disqusShortname = ""
     # - send a dummy email yourself to confirm your account
     # - click the confirm link in the email from www.formspree.io
     # - you're done. Happy mailing!
-    formEmail = "kasokan.mam2021@london.edu"
+    #formEmail = "keshavasokan@gmail.com"
 
     # Contact Section
     # You can add multiple emails, phone numbers, or addresses
     # by copying the corresponding map with frontmatter code.
     [[params.contact.email]]
     title = "Email"
-    email = "kasokan.mam2021@london.edu"
+    email = "asokankeshav@gmail.com"
 
     [[params.contact.phone]]
     title = "Phone"
