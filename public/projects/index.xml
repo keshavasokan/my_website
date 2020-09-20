@@ -25,10 +25,10 @@ Next, we load the data into R using read_csv
       <pubDate>Tue, 31 Oct 2017 22:26:13 -0500</pubDate>
       
       <guid>/projects/project3/</guid>
-      <description>To kick things off, we will load the libraries.
-CDC COVID-19 Public Use Data Let us revisit the CDC Covid-19 Case Surveillance Data.
-There are well over 3 million entries of individual, de-identified patient data. Due to the size of the file,vroom function is used to load the table.
-# URL link to CDC to download data url &amp;lt;- &amp;quot;https://data.cdc.gov/api/views/vbim-akqf/rows.csv?accessType=DOWNLOAD&amp;quot; covid_data &amp;lt;- vroom(url)%&amp;gt;% clean_names() library(scales) covid_death_rate_comorbidities&amp;lt;-covid_data %&amp;gt;% filter(sex %in% c(&amp;#39;Male&amp;#39;,&amp;#39;Female&amp;#39;),!</description>
+      <description>CDC COVID-19 Public Use Data Let us revisit the CDC Covid-19 Case Surveillance Data.
+Let us load the required libraries.
+Load the dataset. There are well over 3 million entries of individual, de-identified patient data.
+# URL link to CDC to download data url &amp;lt;- &amp;quot;https://data.cdc.gov/api/views/vbim-akqf/rows.csv?accessType=DOWNLOAD&amp;quot; # Use `vroom` function is used to load the table as the file is lare. covid_data &amp;lt;- vroom(url)%&amp;gt;% clean_names() library(scales) Select relevant columns and calculate death rates with this formula:</description>
     </item>
     
     <item>

@@ -36,10 +36,10 @@ disqusShortname = ""
     text = "Please visit [this page](/)"
 
   # Navigation Section
-  [params.navigation]
+  #[params.navigation]
     title = "Keshav Asokan"
     subtitle = "Aspiring Data Scientist "
-    menu = "Menu"
+    #menu = "Menu"
     # Optional logo as brand stored in img/
     # logo = "logo.png"
 
@@ -49,15 +49,15 @@ disqusShortname = ""
 
     [[params.navigation.links]]
       name = "CV"
-      url = "blogs"
+      url = "blogs/CV_KESHAV_ASOKAN_MAM2021.pdf"
 
     [[params.navigation.links]]
       name = "Get In Touch"
-      url = "blogs/ipsum"
+      url = "#"
 
     [[params.navigation.links]]
       name = "Social Media"
-      url = "elements.html"
+      url = "#"
 
     # Add custom links here by uncommenting code below. To remove links just delete
     # the [[params.navigation.links]] map associated with that link. Copy and paste
@@ -67,14 +67,14 @@ disqusShortname = ""
     #    url = "UrlOfLink"
 
     # Button Style 1
-    [[params.navigation.button1]]
-      name = "Get Started"
-      url = "blogs"
+    #[[params.navigation.button1]]
+      #name = "Get Started"
+      #url = "blogs"
 
     # Button Style 2
-    [[params.navigation.button2]]
-      name = "Log In"
-      url = "#"
+    #[[params.navigation.button2]]
+      #name = "Log In"
+      #url = "#"
 
 
   # Banner section
@@ -83,7 +83,7 @@ disqusShortname = ""
     # the 'static/img' folder.
    title = "Hi, my name is Keshav"
     subtitle = "I'm interested in pursuing a career in data science."
-    buttonText = "My CV"
+    buttonText = "My Portfolio"
 
 
   # Tiles Section
@@ -138,14 +138,13 @@ disqusShortname = ""
   # Section Type Two
   [params.two]
     enable = true
-    title = "Massa libero"
-    subtitle = """Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. 
-    Mauris aliquet magna magna sed nunc rhoncus pharetra. 
-    Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. 
-    Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero.
-    Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus."""
-    buttonText = "Get Started"
-    url = "blogs"
+    title = "About Me"
+    subtitle = """Keshav is a student of Analytics and is very passionate about the use of data in business. 
+    He is one of the co-founders of DataGrasp, a non-profit student data consultancy which seeks to democratize data science work opportunities to the student community. He read Statistics, Economics and Finance at the University College London where he developed strong data analysis fundamentals. 
+    Post graduation, he pursued employment in a major investment bank, J.P. Morgan as a graduate analyst. 
+    Working a data driven organsiation, Keshav learnt a great deal on how data is able to emplower organisations to make better decisions. He know seeks a data scientist to complement his subject matter expertise in this area."""
+    #buttonText = "Get Started"
+    #url = "blogs"
 
 
   # Contact section
@@ -176,10 +175,10 @@ disqusShortname = ""
 
     [[params.contact.phone]]
     title = "Phone"
-    phone = "+44 7932 78995"
+    phone = "+6015 566 7869"
 
     [[params.contact.address]]
-    title = "London Business School"
+    title = "Address"
     street = "Regent's Park"
     city = "London, NW1 4SA"
     country = "United Kingdom"
@@ -187,7 +186,7 @@ disqusShortname = ""
   # Footer section
   [params.footer]
     enable = true
-    copyright = "Company Name"
+    copyright = "K.A"
 
     # Uses font awesome icons
     [[params.footer.social]]
