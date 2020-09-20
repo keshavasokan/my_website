@@ -12,12 +12,12 @@ title: Brexit Voting Patterns
 
 
 
-<p>In this exercise we are trying to recreate a plot examining how political affiliation translated to the 2015 Brexit referendum.</p>
-<p>First, we load the libraries.</p>
-<p>Next, we load the data into R using read_csv</p>
-<pre class="r"><code>#loading brexit_results
+<p>In this exercise we are trying to recreate a plot examining how political affiliations correlated with how people voted in the 2015 Brexit referendum.</p>
+<p>First, we load the data into R using read_csv and take a glimpse of the dataset.</p>
+<pre class="r"><code># loading brexit_results
 brexit_results &lt;- read_csv(&quot;brexit_results.csv&quot;)
 
+# observe
 glimpse(brexit_results)</code></pre>
 <pre><code>## Rows: 632
 ## Columns: 11
@@ -37,6 +37,7 @@ glimpse(brexit_results)</code></pre>
 brexit_results_tidy &lt;- brexit_results %&gt;% 
   pivot_longer(cols = con_2015:ukip_2015 ,names_to = &quot;political_party&quot;, values_to = &quot;election_share&quot;)
 
+# observe
 glimpse(brexit_results_tidy)</code></pre>
 <pre><code>## Rows: 2,528
 ## Columns: 9
@@ -49,7 +50,7 @@ glimpse(brexit_results_tidy)</code></pre>
 ## $ age_18to24      &lt;dbl&gt; 9.41, 9.41, 9.41, 9.41, 7.33, 7.33, 7.33, 7.33, 6.44,…
 ## $ political_party &lt;chr&gt; &quot;con_2015&quot;, &quot;lab_2015&quot;, &quot;ld_2015&quot;, &quot;ukip_2015&quot;, &quot;con_…
 ## $ election_share  &lt;dbl&gt; 50.59, 18.33, 8.82, 17.87, 52.05, 22.37, 3.37, 19.62,…</code></pre>
-<p>Now that the data set is in “tidy” format, we can start to plot our graphs</p>
+<p>Now that the data set is in “tidy” format, we can start to plot our graphs. Speficially, we are interested in plotting Leave % against Party %.</p>
 <pre class="r"><code>#plotting the graph
 
 vector &lt;- c(&quot;#0087dc&quot;,&quot;#d50000&quot;, &quot;#FDBB30&quot;, &quot;#EFE600&quot;) #this is a vector with party colors
@@ -72,5 +73,5 @@ theme(legend.position = &quot;bottom&quot;,
   
 final_plot</code></pre>
 <p><img src="/projects/project4/index_files/figure-html/unnamed-chunk-3-1.png" width="648" style="display: block; margin: auto;" /></p>
-<p>We can see that constituencies that voted heavily for UKIP voted Leave. This was similar for Conservatives constituencies but the effect of increase was much weaker.</p>
-<p>On the other hand, as a bigger proportion of constituents voted for LibDem or Labour, smaller vote proportion was observed.</p>
+<p>We can see that constituencies that voted heavily for UKIP voted in much larger proportions to leave the EU. This effect was somewhat similar for Conservatives constituencies albeit with much smaller rate.</p>
+<p>On the other hand, in the constituents that voted for LibDem and Labour in the 2015, smaller Leave vote proportion was observed. However, the inverse relationship was much stronger for the LibDem constituencies.</p>

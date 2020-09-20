@@ -27,9 +27,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this exercise we are trying to recreate a plot examining how political affiliation translated to the 2015 Brexit referendum.
+In this exercise we are trying to recreate a plot examining how political affiliations correlated with how people voted in the 2015 Brexit referendum.
 
-First, we load the libraries.
+
 ```{r load-libraries, echo=FALSE}
 library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
 library(mosaic)
@@ -45,27 +45,31 @@ library(infer)
 library(openintro)
 ```
 
-Next, we load the data into R using read_csv
+First, we load the data into R using read_csv and take a glimpse of the dataset.
 
 ```{r}
-#loading brexit_results
+
+# loading brexit_results
 brexit_results <- read_csv("brexit_results.csv")
 
+# observe
 glimpse(brexit_results)
 ```
 
 The data does not yet appear in "tidy" format, so we have to tidy the data before continuing.
 
 ``` {r}
+
 #bringing the data into "tidy" format
 brexit_results_tidy <- brexit_results %>% 
   pivot_longer(cols = con_2015:ukip_2015 ,names_to = "political_party", values_to = "election_share")
 
+# observe
 glimpse(brexit_results_tidy)
 ```
 
 
-Now that the data set is in "tidy" format, we can start to plot our graphs
+Now that the data set is in "tidy" format, we can start to plot our graphs. Speficially, we are interested in plotting Leave % against Party %.
 
 ``` {r}
 #plotting the graph
@@ -91,9 +95,9 @@ theme(legend.position = "bottom",
 final_plot
 ```
 
-We can see that constituencies that voted heavily for UKIP voted Leave. This was similar for Conservatives constituencies but the effect of increase was much weaker. 
+We can see that constituencies that voted heavily for UKIP voted in much larger proportions to leave the EU. This effect was somewhat similar for Conservatives constituencies albeit with much smaller rate. 
 
-On the other hand, as a bigger proportion of constituents voted for LibDem or Labour, smaller vote proportion was observed.
+On the other hand, in the constituents that voted for LibDem and Labour in the 2015, smaller Leave vote proportion was observed. However, the inverse relationship was much stronger for the LibDem constituencies.
 
 
 

@@ -61,21 +61,20 @@ We then perform some data preprocessing tasks:
 1. Process dates.
 2. Select relevant years (2015-2020)
 3. Changing month columns to numeric.
-4. Calculate difference between monthly average and 5 year average for the month.
+4. Calculate difference between monthly average and 5 year historical average for that month.
 
 ```{r}
+
 #
 # Change dates to get year, month, and week
-#
 bike <- bike0 %>% 
   clean_names() %>% 
   rename (bikes_hired = number_of_bicycle_hires) %>% 
   mutate (year = year(day),
           month = lubridate::month(day, label = TRUE),
           week = isoweek(day))
-#
+
 # Select only years 2015-2020.
-#
 bike_filtered <- bike %>%
                   filter(year %in% c(2015: 2020)) %>%
                   group_by(year, month) %>%
@@ -103,9 +102,13 @@ bike_left_join_2 <- bike_left_join_1 %>%
 bike_left_join_2
 ```
 
-Following this, we move on to plotting 2 graphs to show deviation of bike_rentals values from expected values in 2015-2020.
 
-For both of these graphs, we calculate the expected number of rentals per week or month between 2015-2019 and then, see how each week/month of 2020 compares to the expected rentals. More specifically, we use the calculation `excess_rentals = actual_rentals - expected_rentals`.  We used means as expected rentals as the data is approximately normally distributed. 
+Following this, we move on to plotting 2 relevant graphs to illustrate the deviation of bike_rentals values from expected values in 2015-2020.
+
+For both of these graphs, we calculate the expected number of rentals per week or per month between 2015-2019 and then, see how each week/month of 2020 compares to the expected rentals. 
+
+More specifically, we use the calculation `excess_rentals = actual_rentals - expected_rentals`.  We used means as expected rentals as the data is approximately normally distributed. 
+
 
 **Graph 1: Monthly Changes in TFL Bike Rentals**
 
@@ -179,4 +182,6 @@ ggplot(bike_joined_full_2, aes(x=week, y=excessrentalspercent)) +
   scale_y_continuous(labels = function(x) paste0(x, "%"))
 ```
 
-Shifting our lens from the monthly to weekly, we can see some seemily different patterns then when observing only monthly data. For example, not all datapoints in 2015 and early 2016 are below average (red). This is why it is important to be careful to look at different timelines before drawing conclusions.
+Shifting our lens from the monthly to weekly, we can see some seemily different patterns then when observing only monthly data. For example, not all datapoints in 2015 and early 2016 are below average (red). 
+
+This is why it is important to be careful to look at different timelines before drawing conclusions in any analysis.

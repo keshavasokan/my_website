@@ -46,7 +46,7 @@ library(tidyquant)
 
 # Where Do People Drink The Most Beer, Wine And Spirits?
 
-Back in 2014, [fivethiryeight.com](https://fivethirtyeight.com/features/dear-mona-followup-where-do-people-drink-the-most-beer-wine-and-spirits/) published an article on alchohol consumption in different countries. This dataset be a good source into how drinking behaviours differ in countries.
+Back in 2014, [fivethiryeight.com](https://fivethirtyeight.com/features/dear-mona-followup-where-do-people-drink-the-most-beer-wine-and-spirits/) published an article on alchohol consumption in different countries. This dataset be a good source into understanding how drinking behaviours differ in countries.
 
 
 Let us load the dataset.
@@ -57,7 +57,7 @@ data(drinks)
 
 ```
 
-We then perform simple EDA.
+We then perform simple exploratory data analysis (EDA).
 
 ```{r glimpse_skim_data}
 
@@ -65,12 +65,13 @@ glimpse(drinks)
 skim(drinks)
 ```
 
-There are four numeric variables: *beer_servings*, *spirit_servings*, *wine_servings*, and *total_liters_of_pure_alcohol*. 
-
-In addition, there is one character variable, *country* and no missing values.
 
 
-With this, we can start modelling. First, we start by looking at beer consumptions across differing countries. 
+
+From this EDA, we note that there are four numeric variables: *beer_servings*, *spirit_servings*, *wine_servings*, and *total_liters_of_pure_alcohol*.  In addition, there is one character variable, *country* and no missing values.
+
+
+With this insight, we can start modelling. First, we start by looking at beer consumptions patterns across differing countries.
 
 
 ```{r beer_plot}
@@ -82,8 +83,16 @@ NULL
 
   
 ```
-**Country vs Beer consumption** bar charts show that beer is the most popular in Eastern European, African, and Central American countries. Namibia seems to be the top beer drinkers followed closely by Czech Republic and Gabon.
+
+
+The beer consumption by country bar charts show that beer is  most popular in Eastern European, African, and Central American countries. 
+
+Namibia seems to be the top beer drinkers followed closely by Czech Republic and Gabon. 
+
 Russian Federation, Brazil and Andorra drink the least beer.
+
+Next, we plot a bar chart showing wine consumption in various countries.
+
 
 ```{r wine_plot}
 top25_wine <- top_n(drinks, 25, wine_servings)
@@ -93,7 +102,11 @@ y = "Country", x = "Wine Servings (glasses of wine per person per year)") +
 NULL
 
 ```
-**Country vs Wine consumption** bar chart shows that wine is most popular in Western European, Scandinavian, and South American countries. **France** is the top wine consumer.
+
+The wine consumption by country bar chart shows that wine is most popular in Western European, Scandinavian, and South American countries. Unsurprisingly, **France** is the top wine consumer.
+
+Last but not least, we plot a bar chart of spirit consumption.
+
 
 ```{r spirit_plot}
 top25_spirits <- top_n(drinks, 25, spirit_servings)
@@ -102,8 +115,13 @@ y = "Country", x = "Spirits Servings (measures of spirit per year)") +
 NULL
 
 ```
-Furthermore, **Country vs Spirit Consumption** shows that spirits tend to be popular in Eastern European and some Asian countries as well as on islands. **Grenada** drinks the most spirit while **Mongolia** drinks the least.
 
 
-Overall, the bar charts show two trends. First one is that countries that are large exporters of a certain product tend to be the highest consumers. For example France and Portugal are among the top wine consuming countries, Czech Republic is the second in the beer chart, whereas Russia and Belarus are among the top countries for spirits consumption (which includes Vodka for example). It also seems that overall more developed countries enjoy more wine consumption, whereas less developed countries enjoy more beer and spirits consumption. This is expected as wine is usually more expensive and can be associated with prestige (especially if it is old!)
+Furthermore, spirit consumption by country shows that spirits tend to be popular in Eastern European and some Asian countries as well as on islands. **Grenada** drinks the most spirit while **Mongolia** drinks the least.
+
+# Conclusion
+
+Overall, the bar charts show **two clear trends**. First is that countries who are large exporters of a certain product tend to be the highest consumers of that product. For example France and Portugal are among the top wine consuming countries, Czech Republic is the second in the beer chart, whereas Russia and Belarus are among the top countries for spirits consumption. 
+
+It also seems that developed countries enjoy more wine consumption, whereas developing countries enjoy more beer and spirits consumption. This is expected as wine is usually more expensive and can be associated with prestige (especially if it is old!)
 

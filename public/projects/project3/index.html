@@ -84,17 +84,16 @@
 <div id="cdc-covid-19-public-use-data" class="section level1">
 <h1>CDC COVID-19 Public Use Data</h1>
 <p>Let us revisit the <a href="https://data.cdc.gov/Case-Surveillance/COVID-19-Case-Surveillance-Public-Use-Data/vbim-akqf">CDC Covid-19 Case Surveillance Data</a>.</p>
-<p>Let us load the required libraries.</p>
-<p>Load the dataset. There are well over 3 million entries of individual, de-identified patient data.</p>
+<p>We start by loading the dataset. There are well over 3 million entries of individual, de-identified patient data, so this process takes a while.</p>
 <pre class="r"><code># URL link to CDC to download data
 url &lt;- &quot;https://data.cdc.gov/api/views/vbim-akqf/rows.csv?accessType=DOWNLOAD&quot;
 
 
-# Use `vroom` function is used to load the table as the file is lare.
+# Use `vroom` function is used to load the table as the file is large.
 covid_data &lt;- vroom(url)%&gt;%
   clean_names()
 library(scales)</code></pre>
-<p>Select relevant columns and calculate death rates with this formula:</p>
+<p>We now select relevant columns and calculate death rates with this formula:</p>
 <p>death_rate = Number of deaths/Total Deaths x 100</p>
 <pre class="r"><code># Create a death_rate_comorbidities column
 covid_death_rate_comorbidities&lt;-covid_data %&gt;% 
@@ -107,7 +106,7 @@ covid_death_rate_comorbidities&lt;-covid_data %&gt;%
 
 # Change labels for better clarity
 new_labels&lt;-c(&#39;Yes&#39;=&#39;With Comorbidities&#39;,&#39;No&#39;=&#39;Without Comorbidities&#39;)</code></pre>
-<p>Now , we plot a graph of Covid death % percent by age group, sex, and presence of co-morbidities.</p>
+<p>Next, we plot a graph of Covid death % percent by age group, sex, and presence of co-morbidities.</p>
 <pre class="r"><code>ggplot(covid_death_rate_comorbidities,aes(x=death_rate,y=age_group))+
 geom_col(fill=&#39;blue&#39;)+
 facet_grid(medcond_yn~sex,as.table=FALSE,labeller=labeller(medcond_yn=new_labels))+
@@ -117,13 +116,15 @@ facet_grid(medcond_yn~sex,as.table=FALSE,labeller=labeller(medcond_yn=new_labels
   scale_x_continuous(labels=label_percent(scale=1))+
   labs(title = &quot;Does presence of co affect Covid death rates?&quot;, subtitle=&#39;Covid death % percent by age group, sex, and presence of co-morbidities&#39;,x=&#39;&#39;,y=&#39;&#39;,caption=&#39;Source:CDC&#39;)+
   theme(plot.title=element_text(size=9))</code></pre>
-<p><img src="/projects/project3/index_files/figure-html/unnamed-chunk-3-1.png" width="648" style="display: block; margin: auto;" />
-From this graph, we can see:
-1. Older groups have a higher death rates. E.g. 67.3 for males above 80 years old with co-morbidities.
-2. Death rate for males are higher than females. (In 50-59 year group without co-morbidities, 0.4% females died vs 1.4% male )
-3. For a particular gender and age group, covid patients who are admitted into ICU die at a higher rate compared to those not admitted.</p>
+<p><img src="/projects/project3/index_files/figure-html/unnamed-chunk-3-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>From this graph, we can see that:</p>
+<ol style="list-style-type: decimal">
+<li><p>Older groups have a higher death rates. E.g. 67.3% for males above 80 years old with co-morbidities.</p></li>
+<li><p>Death rate for males are higher than females. (In 50-59 year group without co-morbidities, 0.4% females died vs 1.4% male)</p></li>
+<li><p>For a particular gender and age group, Covid-19 patients who are admitted into ICU die at a higher rate compared to those not admitted.</p></li>
+</ol>
 <p>This shows that increased age and presence of <strong>co-morbidities</strong> is correlated with higher death rate.</p>
-<p>Next, we plot a graph of Covid death % percent by age group, sex, and ICU admission.</p>
+<p>Next, we plot a graph of Covid death percent by age group, sex, and ICU admission.</p>
 <pre class="r"><code># Create a death_rate_icu column
 covid_death_rate_icu&lt;-covid_data %&gt;% 
   filter(sex %in% c(&#39;Male&#39;,&#39;Female&#39;),!age_group %in% c(&#39;Unknown&#39;,NA),icu_yn %in% c(&#39;Yes&#39;,&#39;No&#39;),death_yn %in% c(&#39;Yes&#39;,&#39;No&#39;)) %&gt;% 
@@ -147,11 +148,13 @@ facet_grid(icu_yn~sex,as.table=FALSE,labeller=labeller(icu_yn=new_labels_icu))+
   labs(title = &quot;Does admission to ICU affect Covid death rates?&quot;, subtitle=&#39;Covid death % percent by age group, sex, and weather patient was admitted to ICU&#39;,x=&#39;&#39;,y=&#39;&#39;,caption=&#39;Source:CDC&#39;)+
   theme(plot.title=element_text(size=9)) </code></pre>
 <p><img src="/projects/project3/index_files/figure-html/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" />
-Here are some observations from this plot:
-1. Older groups have a higher death rates. E.g. 81.1 for males above 80 years old admitted to ICU.
-2. Death rate for males are higher than females.
-3. For a particular gender and age group, covid patients who are admitted into ICU die at a higher rate compared to those not admitted.</p>
-<p>It is important that c<strong>orrelation does not equate causation</strong>. In the context of this question, this is to say that old age and ICU admission <strong>does not cause</strong> an increase death amongst Covid patients.</p>
+Here are some observations from this plot:</p>
+<ol style="list-style-type: decimal">
+<li><p>Older groups have a higher death rates. E.g. 81.1% death rate for males above 80 years old admitted to ICU.</p></li>
+<li><p>Death rate for males are higher than females.</p></li>
+<li><p>For a particular gender and age group, Covid-19 patients who are admitted into ICU die at a higher rate compared to those not admitted.</p></li>
+</ol>
+<p>It is important that <strong>correlation does not equate causation</strong>. In the context of this question, this is to say that old age and ICU admission <strong>does not cause</strong> an increase death amongst Covid patients, they are just correlated with a higher death rate.</p>
 </div>
 
                         </div>

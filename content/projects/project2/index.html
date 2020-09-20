@@ -18,12 +18,12 @@ title: TFL Bike Usage
 
 # Download TFL data to temporary file
 httr::GET(url, write_disk(bike.temp &lt;- tempfile(fileext = &quot;.xlsx&quot;)))</code></pre>
-<pre><code>## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-09-18T09%3A06%3A54/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20200919%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20200919T233428Z&amp;X-Amz-Expires=300&amp;X-Amz-Signature=a9d0fd3650fffa76e3ce55dbcbeb9d234c37b8532d064f88bec87ff78380bd45&amp;X-Amz-SignedHeaders=host]
-##   Date: 2020-09-19 23:34
+<pre><code>## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2020-09-18T09%3A06%3A54/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20200920%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20200920T204527Z&amp;X-Amz-Expires=300&amp;X-Amz-Signature=dae0be846650f748cf60bcb835c980ffd4e9e195222fb7bc551bb9a0d86090f7&amp;X-Amz-SignedHeaders=host]
+##   Date: 2020-09-20 20:48
 ##   Status: 200
 ##   Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
 ##   Size: 165 kB
-## &lt;ON DISK&gt;  /var/folders/rs/vrxx2x5d1xn8sh9wnyssxfsr0000gn/T//Rtmps8gfaJ/file5792e707148.xlsx</code></pre>
+## &lt;ON DISK&gt;  /var/folders/rs/vrxx2x5d1xn8sh9wnyssxfsr0000gn/T//RtmppzoKsU/file2ab84024666a.xlsx</code></pre>
 <pre class="r"><code># Use read_excel to read it as dataframe
 bike0 &lt;- read_excel(bike.temp,
                    sheet = &quot;Data&quot;,
@@ -33,20 +33,18 @@ bike0 &lt;- read_excel(bike.temp,
 <li>Process dates.</li>
 <li>Select relevant years (2015-2020)</li>
 <li>Changing month columns to numeric.</li>
-<li>Calculate difference between monthly average and 5 year average for the month.</li>
+<li>Calculate difference between monthly average and 5 year historical average for that month.</li>
 </ol>
 <pre class="r"><code>#
 # Change dates to get year, month, and week
-#
 bike &lt;- bike0 %&gt;% 
   clean_names() %&gt;% 
   rename (bikes_hired = number_of_bicycle_hires) %&gt;% 
   mutate (year = year(day),
           month = lubridate::month(day, label = TRUE),
           week = isoweek(day))
-#
+
 # Select only years 2015-2020.
-#
 bike_filtered &lt;- bike %&gt;%
                   filter(year %in% c(2015: 2020)) %&gt;%
                   group_by(year, month) %&gt;%
@@ -87,8 +85,9 @@ bike_left_join_2</code></pre>
 ##  9  2015     9   30114.        32433.     -2319.
 ## 10  2015    10   28560.        29900.     -1339.
 ## # … with 58 more rows</code></pre>
-<p>Following this, we move on to plotting 2 graphs to show deviation of bike_rentals values from expected values in 2015-2020.</p>
-<p>For both of these graphs, we calculate the expected number of rentals per week or month between 2015-2019 and then, see how each week/month of 2020 compares to the expected rentals. More specifically, we use the calculation <code>excess_rentals = actual_rentals - expected_rentals</code>. We used means as expected rentals as the data is approximately normally distributed.</p>
+<p>Following this, we move on to plotting 2 relevant graphs to illustrate the deviation of bike_rentals values from expected values in 2015-2020.</p>
+<p>For both of these graphs, we calculate the expected number of rentals per week or per month between 2015-2019 and then, see how each week/month of 2020 compares to the expected rentals.</p>
+<p>More specifically, we use the calculation <code>excess_rentals = actual_rentals - expected_rentals</code>. We used means as expected rentals as the data is approximately normally distributed.</p>
 <p><strong>Graph 1: Monthly Changes in TFL Bike Rentals</strong></p>
 <p>For our first graph, we plot a graph to show how much bike_rentals deviates from the monthly average in 2015-2020.</p>
 <pre class="r"><code># Change to numeric
@@ -143,4 +142,5 @@ bike_joined_full_2 &lt;- bike_joined_full %&gt;%
   theme(legend.position=&#39;none&#39;) +
   scale_y_continuous(labels = function(x) paste0(x, &quot;%&quot;))</code></pre>
 <p><img src="/projects/project2/index_files/figure-html/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>
-<p>Shifting our lens from the monthly to weekly, we can see some seemily different patterns then when observing only monthly data. For example, not all datapoints in 2015 and early 2016 are below average (red). This is why it is important to be careful to look at different timelines before drawing conclusions.</p>
+<p>Shifting our lens from the monthly to weekly, we can see some seemily different patterns then when observing only monthly data. For example, not all datapoints in 2015 and early 2016 are below average (red).</p>
+<p>This is why it is important to be careful to look at different timelines before drawing conclusions in any analysis.</p>

@@ -33,8 +33,6 @@ knitr::opts_chunk$set(
 Let us revisit the [CDC Covid-19 Case Surveillance Data](https://data.cdc.gov/Case-Surveillance/COVID-19-Case-Surveillance-Public-Use-Data/vbim-akqf). 
 
 
-Let us load the required libraries.
-
 ```{r load-libraries, include=FALSE}
 library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
 library(mosaic)
@@ -49,19 +47,21 @@ library(vroom)
 library(scales)
 ```
 
-Load the dataset. There are well over 3 million entries of individual, de-identified patient data. 
+We start by loading the dataset.  There are well over 3 million entries of individual, de-identified patient data, so this process takes a while. 
 
 ```{r, cache= TRUE}
 # URL link to CDC to download data
 url <- "https://data.cdc.gov/api/views/vbim-akqf/rows.csv?accessType=DOWNLOAD"
 
 
-# Use `vroom` function is used to load the table as the file is lare.
+# Use `vroom` function is used to load the table as the file is large.
 covid_data <- vroom(url)%>%
   clean_names()
 library(scales)
 ```
-Select relevant columns and calculate death rates with this formula:
+
+
+We now select relevant columns and calculate death rates with this formula:
 
 death_rate = Number of deaths/Total Deaths x 100
 
@@ -78,7 +78,9 @@ covid_death_rate_comorbidities<-covid_data %>%
 # Change labels for better clarity
 new_labels<-c('Yes'='With Comorbidities','No'='Without Comorbidities')
 ```
-Now , we plot a graph of Covid death % percent by age group, sex, and presence of co-morbidities.
+
+Next, we plot a graph of Covid death % percent by age group, sex, and presence of co-morbidities.
+
 ```{r}
 ggplot(covid_death_rate_comorbidities,aes(x=death_rate,y=age_group))+
 geom_col(fill='blue')+
@@ -91,14 +93,18 @@ facet_grid(medcond_yn~sex,as.table=FALSE,labeller=labeller(medcond_yn=new_labels
   theme(plot.title=element_text(size=9))
 
 ```
-From this graph, we can see: 
-1. Older groups have a higher death rates. E.g. 67.3 for males above 80 years old with co-morbidities.
-2. Death rate for males are higher than females. (In 50-59 year group without co-morbidities, 0.4% females died vs 1.4% male )
-3. For a particular gender and age group, covid patients who are admitted into ICU die at a higher rate compared to those not admitted. 
+
+From this graph, we can see that:
+
+1. Older groups have a higher death rates. E.g. 67.3% for males above 80 years old with co-morbidities.
+
+2. Death rate for males are higher than females. (In 50-59 year group without co-morbidities, 0.4% females died vs 1.4% male)
+
+3. For a particular gender and age group, Covid-19 patients who are admitted into ICU die at a higher rate compared to those not admitted. 
 
 This shows that increased age and presence of **co-morbidities** is correlated with higher death rate.
 
-Next, we plot a graph of Covid death % percent by age group, sex, and ICU admission. 
+Next, we plot a graph of Covid death  percent by age group, sex, and ICU admission. 
 ```{r}
 # Create a death_rate_icu column
 covid_death_rate_icu<-covid_data %>% 
@@ -124,9 +130,12 @@ facet_grid(icu_yn~sex,as.table=FALSE,labeller=labeller(icu_yn=new_labels_icu))+
   theme(plot.title=element_text(size=9)) 
 
 ```
-Here are some observations from this plot: 
-1. Older groups have a higher death rates. E.g. 81.1 for males above 80 years old admitted to ICU.
-2. Death rate for males are higher than females.
-3. For a particular gender and age group, covid patients who are admitted into ICU die at a higher rate compared to those not admitted.
+Here are some observations from this plot:
 
-It is important that c**orrelation does not equate causation**. In the context of this question, this is to say that old age and ICU admission **does not cause** an increase death amongst Covid patients. 
+1. Older groups have a higher death rates. E.g. 81.1% death rate for males above 80 years old admitted to ICU.
+
+2. Death rate for males are higher than females.
+
+3. For a particular gender and age group, Covid-19 patients who are admitted into ICU die at a higher rate compared to those not admitted.
+
+It is important that **correlation does not equate causation**. In the context of this question, this is to say that old age and ICU admission **does not cause** an increase death amongst Covid patients, they are just correlated with a higher death rate. 
