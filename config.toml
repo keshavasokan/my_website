@@ -114,6 +114,13 @@ disqusShortname = ""
       subtitle = "Did Political Affiliation affect Voting Patters?"
       image = "projects/project4_image.png"
       url = "projects/project4"
+      
+    [[params.tiles.showcase]]
+      title = "Health Insurance"
+      subtitle = "What are the factors affecting health insurance costs?"
+      image = "projects/project4_image.png"
+      url = "projects/project4"
+
 
     ##[[params.tiles.showcase]]
       #title = "Consequat"
