@@ -122,11 +122,11 @@ disqusShortname = ""
       url = "projects/project5"
 
 
-    ##[[params.tiles.showcase]]
-      #title = "Consequat"
-      #subtitle = "Ipsum Dolor Sit Amet"
+    [[params.tiles.showcase]]
+      title = "Booking Prediction Analysis"
+      subtitle = "Is a customer likely to book on Expedia?"
       #image = "pic05.jpg"
-      #url = "blogs/ipsum"
+      url = "projects/projects6"
 
    ## [[params.tiles.showcase]]
       #title = "Etiam"
