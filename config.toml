@@ -126,7 +126,7 @@ disqusShortname = ""
       title = "Booking Prediction Analysis"
       subtitle = "Is a customer likely to book on Expedia?"
       image = "projects/project6_image.jpeg"
-      url = "projects/projects6"
+      url = "projects/project6"
 
    ## [[params.tiles.showcase]]
       #title = "Etiam"

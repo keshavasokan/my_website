@@ -1,0 +1,112 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T22:42:51-05:00"
+draft: false
+#image: pic07.jpg
+keywords: ""
+slug: project4
+title: Brexit Voting Patterns
+---
+
+
+```{r, setup, echo=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+```
+
+In this exercise we are trying to recreate a plot examining how political affiliations correlated with how people voted in the 2015 Brexit referendum.
+
+
+```{r load-libraries, echo=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(GGally)
+library(readxl)
+library(here)
+library(skimr)
+library(janitor)
+library(broom)
+library(tidyquant)
+library(infer)
+library(openintro)
+```
+
+
+# Data Input
+
+First, we load the data into R using read_csv and take a glimpse of the dataset.
+
+```{r}
+
+# loading brexit_results
+brexit_results <- read_csv("brexit_results.csv")
+
+# observe
+glimpse(brexit_results)
+```
+
+# Cleaning Data 
+
+The data does not yet appear in "tidy" format, so we have to tidy the data before continuing.
+
+``` {r}
+
+#bringing the data into "tidy" format
+brexit_results_tidy <- brexit_results %>% 
+  pivot_longer(cols = con_2015:ukip_2015 ,names_to = "political_party", values_to = "election_share")
+
+# observe
+glimpse(brexit_results_tidy)
+```
+
+# Data Visualisation
+
+Now that the data set is in "tidy" format, we can start to plot our graphs. Speficially, we are interested in plotting Leave % against Party %.
+
+``` {r}
+#plotting the graph
+
+vector <- c("#0087dc","#d50000", "#FDBB30", "#EFE600") #this is a vector with party colors
+
+final_plot <- ggplot(brexit_results_tidy) + #using tidy data
+geom_point(aes(x=election_share, y=leave_share, group = political_party, color = political_party), #observations grouped by political party, color dependent on political party aswell
+             size=1, # adjusting point size
+             alpha=0.3) + #adjusting transparency
+geom_smooth(aes(x=election_share, y=leave_share, group = political_party, color = political_party), #observations grouped by political party, color dependent on political party as well
+              method="lm", 
+              formula='y~x') + 
+scale_color_manual(values = vector, #using colors defined above to overwrite standard colors
+                     labels = c("Conservative", "Labour", "LibDem", "UKIP")) + #adding lables to groups
+theme_bw() +
+theme(legend.position = "bottom", 
+        legend.title=element_blank()) + #formatting legend
+  labs(x="Party % in the UK 2015 general election", 
+       y="Leave % in the 2016 Brexit referendum", 
+       title="How political affiliation translated to Brexit Voting") #formatting axes wit labs()
+  
+final_plot
+```
+
+# Conclusion
+
+We can see that constituencies that voted heavily for UKIP voted in much larger proportions to leave the EU. This positive correlation was somewhat similar for Conservatives constituencies albeit to a much smaller rate. 
+
+On the other hand, in the constituents that voted for LibDem and Labour in the 2015, smaller Leave vote proportion was observed. However, the inverse relationship was much stronger for the LibDem constituencies.
+
+
+
+
