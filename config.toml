@@ -147,8 +147,8 @@ disqusShortname = ""
     enable = true
     title = "About Me"
     subtitle = """Keshav Asokan is a experienced data scientist and is very passionate about the use of data in business. He read Statistics, Economics and Finance at the University College London where he developed strong data analysis fundamentals. 
-    Post graduation, he pursued employment in a major investment bank, J.P. Morgan as a graduate analyst. 
-    Working in a data driven organsiation, Keshav learnt first hand on how data is able to empower organisations to make better decisions. He is currently seeking a data scientist position to complement his subject matter expertise in this area."""
+    He has worked in top institutions, J.P. Morgan (a major investment bank), LV= (UK's personal insurance arm of Allianz) & Funding Circle (top Fintech)
+    Having worked in data driven organisations, Keshav learnt first hand on how data is able to empower organisations to make better decisions."""
     buttonText = "MY CV"
     url = "blogs/CV_KESHAV_ASOKAN_DATA MY.pdf"
     
