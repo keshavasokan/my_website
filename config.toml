@@ -116,8 +116,8 @@ disqusShortname = ""
       url = "projects/project4"
       
     [[params.tiles.showcase]]
-      title = "Health Insurance"
-      subtitle = "What are the factors affecting health insurance costs?"
+      title = "Credit Card Approval"
+      subtitle = "What are the factors affecting approval for a credit card application?"
       image = "projects/project5_image.png"
       url = "projects/project5"
 
@@ -186,7 +186,7 @@ disqusShortname = ""
     [[params.contact.address]]
     title = "Address"
     street = "Southwark"
-    city = "London, NW1 4SA"
+    city = "London"
     country = "United Kingdom"
 
   # Footer section
